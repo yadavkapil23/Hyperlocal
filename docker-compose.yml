@@ -1,0 +1,45 @@
+services:
+  db:
+    image: postgis/postgis:16-3.4
+    container_name: thirdplace-db
+    environment:
+      - POSTGRES_DB=thirdplace
+      - POSTGRES_USER=thirdplace
+      - POSTGRES_PASSWORD=thirdplace
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./db/init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build: ./backend
+    container_name: thirdplace-backend
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "5000:5000"
+    environment:
+      - DATABASE_URL=postgresql+psycopg://thirdplace:thirdplace@db:5432/thirdplace
+      - JWT_SECRET_KEY=change_me_in_prod
+
+  frontend:
+    build: ./frontend
+    container_name: thirdplace-frontend
+    depends_on:
+      - backend
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_BASE_URL=http://localhost:5000
+
+volumes:
+  db_data:
+
+
