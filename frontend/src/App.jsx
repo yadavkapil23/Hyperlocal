@@ -34,39 +34,39 @@ function AppContent() {
 
   return (
     <div className="h-screen flex flex-col">
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b p-4 flex justify-between items-center">
-        <h1 className="text-xl font-bold text-gray-800">Third-Place</h1>
-        
-        <div className="flex items-center gap-4">
-          {isAuthenticated ? (
-            <div className="flex items-center gap-3">
-              <div className="flex items-center gap-2 text-sm text-gray-600">
-                <User size={16} />
-                <span>{user?.display_name || user?.email}</span>
+        {/* Header */}
+        <header className="bg-white/95 backdrop-blur-sm shadow-lg border-b border-gray-200 p-6 flex justify-between items-center">
+          <h1 className="text-2xl font-bold text-gray-800">Third-Place</h1>
+          
+          <div className="flex items-center gap-4">
+            {isAuthenticated ? (
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2 text-sm text-gray-700 bg-gray-100 px-3 py-2 rounded-lg">
+                  <User size={16} />
+                  <span className="font-medium">{user?.display_name || user?.email}</span>
+                </div>
+                <button
+                  onClick={logout}
+                  className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-800 bg-gray-100 hover:bg-gray-200 px-3 py-2 rounded-lg transition-colors"
+                >
+                  <LogOut size={16} />
+                  Logout
+                </button>
               </div>
+            ) : (
               <button
-                onClick={logout}
-                className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-800"
+                onClick={() => setShowAuthModal(true)}
+                className="flex items-center gap-2 text-sm text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg transition-colors font-medium"
               >
-                <LogOut size={16} />
-                Logout
+                <LogIn size={16} />
+                Login
               </button>
-            </div>
-          ) : (
-            <button
-              onClick={() => setShowAuthModal(true)}
-              className="flex items-center gap-2 text-sm text-blue-600 hover:text-blue-800"
-            >
-              <LogIn size={16} />
-              Login
-            </button>
-          )}
-        </div>
-      </header>
+            )}
+          </div>
+        </header>
 
       {/* Main Content */}
-      <main className="flex-1 relative">
+      <main className="flex-1 relative" style={{ height: 'calc(100vh - 80px)' }}>
         <Map 
           onEventClick={handleEventClick}
           selectedEvent={selectedEvent}

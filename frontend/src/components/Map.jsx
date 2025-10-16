@@ -38,9 +38,13 @@ const MapEvents = ({ onEventClick, selectedEvent, eventsData }) => {
       // Fit map to show all events
       const bounds = L.latLngBounds();
       eventsData.data.results.forEach(event => {
-        bounds.extend([event.latitude, event.longitude]);
+        const lat = event.latitude || event.lat || 0;
+        const lng = event.longitude || event.lng || 0;
+        if (lat && lng && lat !== 0 && lng !== 0) {
+          bounds.extend([lat, lng]);
+        }
       });
-      if (eventsData.data.results.length > 0) {
+      if (bounds.isValid()) {
         map.fitBounds(bounds, { padding: [20, 20] });
       }
     }
@@ -48,30 +52,42 @@ const MapEvents = ({ onEventClick, selectedEvent, eventsData }) => {
 
   return (
     <>
-      {eventsData?.data?.results?.map((event) => (
-        <Marker
-          key={event.id}
-          position={[event.latitude, event.longitude]}
-          icon={createCustomIcon(
-            selectedEvent?.id === event.id ? '#ff6b6b' : '#4ecdc4'
-          )}
-          eventHandlers={{
-            click: () => onEventClick(event),
-          }}
-        >
-          <Popup>
-            <div className="p-2">
-              <h3 className="font-semibold text-sm">{event.title}</h3>
-              <p className="text-xs text-gray-600">{event.category}</p>
-              {event.distance_m && (
-                <p className="text-xs text-gray-500">
-                  {Math.round(event.distance_m)}m away
-                </p>
-              )}
-            </div>
-          </Popup>
-        </Marker>
-      ))}
+      {eventsData?.data?.results?.map((event) => {
+        // Extract coordinates from the event
+        // The API might return coordinates in different formats
+        const lat = event.latitude || event.lat || 0;
+        const lng = event.longitude || event.lng || 0;
+        
+        // Skip events with invalid coordinates
+        if (!lat || !lng || lat === 0 || lng === 0) {
+          return null;
+        }
+        
+        return (
+          <Marker
+            key={event.id}
+            position={[lat, lng]}
+            icon={createCustomIcon(
+              selectedEvent?.id === event.id ? '#ff6b6b' : '#4ecdc4'
+            )}
+            eventHandlers={{
+              click: () => onEventClick(event),
+            }}
+          >
+            <Popup>
+              <div className="p-2">
+                <h3 className="font-semibold text-sm">{event.title}</h3>
+                <p className="text-xs text-gray-600">{event.category}</p>
+                {event.distance_m && (
+                  <p className="text-xs text-gray-500">
+                    {Math.round(event.distance_m)}m away
+                  </p>
+                )}
+              </div>
+            </Popup>
+          </Marker>
+        );
+      })}
     </>
   );
 };
@@ -97,7 +113,7 @@ export const Map = ({ onEventClick, selectedEvent, filters }) => {
       <MapContainer
         center={mapCenter}
         zoom={13}
-        style={{ height: '100%', width: '100%' }}
+        style={{ height: '100vh', width: '100%', minHeight: '500px' }}
         whenCreated={(mapInstance) => {
           // Update center when map moves
           mapInstance.on('moveend', () => {
@@ -119,28 +135,43 @@ export const Map = ({ onEventClick, selectedEvent, filters }) => {
       </MapContainer>
       
       {/* Map controls */}
-      <div className="absolute top-4 right-4 bg-white p-4 rounded-lg shadow-lg z-[1000]">
-        <div className="mb-2">
-          <label className="block text-sm font-medium mb-1">Search Radius (m)</label>
-          <input
-            type="range"
-            min="500"
-            max="10000"
-            step="500"
-            value={radius}
-            onChange={(e) => setRadius(Number(e.target.value))}
-            className="w-full"
-          />
-          <div className="text-xs text-gray-600">{radius}m</div>
+      <div className="absolute top-4 right-4 bg-white/95 backdrop-blur-sm p-6 rounded-xl shadow-xl border border-gray-200 z-[1000] min-w-[280px]">
+        <div className="mb-4">
+          <label className="block text-sm font-semibold text-gray-800 mb-3">Search Radius</label>
+          <div className="relative">
+            <input
+              type="range"
+              min="500"
+              max="10000"
+              step="500"
+              value={radius}
+              onChange={(e) => setRadius(Number(e.target.value))}
+              className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+            />
+            <div className="flex justify-between text-xs text-gray-500 mt-1">
+              <span>500m</span>
+              <span>10km</span>
+            </div>
+          </div>
+          <div className="text-center mt-2">
+            <span className="inline-block bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full">
+              {radius}m
+            </span>
+          </div>
         </div>
         
         {isLoading && (
-          <div className="text-sm text-gray-600">Loading events...</div>
+          <div className="flex items-center justify-center py-2">
+            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-500"></div>
+            <span className="ml-2 text-sm text-gray-600">Loading events...</span>
+          </div>
         )}
         
         {eventsData?.data?.results && (
-          <div className="text-sm text-gray-600">
-            {eventsData.data.results.length} events found
+          <div className="text-center">
+            <span className="inline-block bg-green-100 text-green-800 text-sm font-medium px-3 py-1 rounded-full">
+              {eventsData.data.results.length} events found
+            </span>
           </div>
         )}
       </div>

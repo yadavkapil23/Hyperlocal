@@ -31,36 +31,36 @@ export const Filters = ({ onFiltersChange, isOpen, onToggle }) => {
       {/* Filter Toggle Button */}
       <button
         onClick={onToggle}
-        className="fixed top-4 left-4 z-10 bg-white p-3 rounded-lg shadow-lg hover:bg-gray-50"
+        className="fixed top-4 left-4 z-10 bg-white/95 backdrop-blur-sm p-4 rounded-xl shadow-xl border border-gray-200 hover:bg-white hover:shadow-2xl transition-all duration-200"
       >
-        <Filter size={20} />
+        <Filter size={20} className="text-gray-700" />
       </button>
 
       {/* Filter Sidebar */}
       <div
-        className={`fixed top-0 left-0 h-full w-80 bg-white shadow-lg transform transition-transform z-20 ${
+        className={`fixed top-0 left-0 h-full w-80 bg-white/95 backdrop-blur-sm shadow-2xl transform transition-all duration-300 z-20 ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
-        <div className="p-6">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-lg font-semibold">Filters</h2>
+        <div className="p-8 h-full flex flex-col">
+          <div className="flex justify-between items-center mb-8">
+            <h2 className="text-xl font-bold text-gray-800">Filters</h2>
             <button
               onClick={onToggle}
-              className="text-gray-500 hover:text-gray-700"
+              className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
             >
-              <X size={20} />
+              <X size={20} className="text-gray-600" />
             </button>
           </div>
 
-          <div className="space-y-6">
+          <div className="space-y-8 flex-1">
             {/* Category Filter */}
             <div>
-              <label className="block text-sm font-medium mb-2">Category</label>
+              <label className="block text-sm font-semibold text-gray-800 mb-3">Category</label>
               <select
                 value={filters.category}
                 onChange={(e) => handleFilterChange('category', e.target.value)}
-                className="w-full p-2 border rounded-lg"
+                className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-white"
               >
                 <option value="">All Categories</option>
                 {categories?.data?.map((category) => (
@@ -73,22 +73,24 @@ export const Filters = ({ onFiltersChange, isOpen, onToggle }) => {
 
             {/* Time Filter */}
             <div>
-              <label className="block text-sm font-medium mb-2">Starts After</label>
+              <label className="block text-sm font-semibold text-gray-800 mb-3">Starts After</label>
               <input
                 type="datetime-local"
                 value={filters.starts_after}
                 onChange={(e) => handleFilterChange('starts_after', e.target.value)}
-                className="w-full p-2 border rounded-lg"
+                className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-white"
               />
             </div>
 
             {/* Clear Filters */}
-            <button
-              onClick={clearFilters}
-              className="w-full py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
-            >
-              Clear Filters
-            </button>
+            <div className="pt-4">
+              <button
+                onClick={clearFilters}
+                className="w-full py-3 px-4 text-gray-700 border-2 border-gray-300 rounded-xl hover:bg-gray-50 hover:border-gray-400 transition-all duration-200 font-medium"
+              >
+                Clear Filters
+              </button>
+            </div>
           </div>
         </div>
       </div>
