@@ -40,69 +40,214 @@ export const AuthModal = ({ isOpen, onClose, mode = 'login' }) => {
     });
   };
 
-  if (!isOpen) return null;
+  console.log('AuthModal render - isOpen:', isOpen);
+  
+  if (!isOpen) {
+    console.log('AuthModal not rendering because isOpen is false');
+    return null;
+  }
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold">
+    <div style={{
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      background: 'rgba(0, 0, 0, 0.5)',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      zIndex: 50,
+      fontFamily: 'system-ui, -apple-system, sans-serif'
+    }}>
+      <div style={{
+        background: 'white',
+        borderRadius: '12px',
+        padding: '24px',
+        maxWidth: '400px',
+        width: '100%',
+        margin: '0 16px',
+        boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
+      }}>
+        <div style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginBottom: '24px'
+        }}>
+          <h2 style={{
+            fontSize: '20px',
+            fontWeight: '700',
+            color: '#1f2937',
+            margin: 0
+          }}>
             {formMode === 'login' ? 'Log In' : 'Sign Up'}
           </h2>
           <button
             onClick={onClose}
-            className="text-gray-500 hover:text-gray-700"
+            style={{
+              background: 'transparent',
+              border: 'none',
+              color: '#6b7280',
+              cursor: 'pointer',
+              padding: '4px',
+              borderRadius: '4px',
+              transition: 'color 200ms'
+            }}
+            onMouseEnter={(e) => e.target.style.color = '#374151'}
+            onMouseLeave={(e) => e.target.style.color = '#6b7280'}
           >
             <X size={20} />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
           <div>
-            <label className="block text-sm font-medium mb-1">Email</label>
+            <label style={{
+              display: 'block',
+              fontSize: '14px',
+              fontWeight: '500',
+              color: '#374151',
+              marginBottom: '4px'
+            }}>Email</label>
             <input
               type="email"
               name="email"
               value={formData.email}
               onChange={handleInputChange}
               required
-              className="w-full p-2 border rounded-lg"
+              style={{
+                width: '100%',
+                padding: '12px 16px',
+                border: '1px solid #d1d5db',
+                borderRadius: '8px',
+                fontSize: '14px',
+                color: '#374151',
+                background: 'white',
+                outline: 'none',
+                transition: 'all 200ms'
+              }}
+              onFocus={(e) => {
+                e.target.style.borderColor = '#3b82f6';
+                e.target.style.boxShadow = '0 0 0 3px rgba(59, 130, 246, 0.1)';
+              }}
+              onBlur={(e) => {
+                e.target.style.borderColor = '#d1d5db';
+                e.target.style.boxShadow = 'none';
+              }}
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">Password</label>
+            <label style={{
+              display: 'block',
+              fontSize: '14px',
+              fontWeight: '500',
+              color: '#374151',
+              marginBottom: '4px'
+            }}>Password</label>
             <input
               type="password"
               name="password"
               value={formData.password}
               onChange={handleInputChange}
               required
-              className="w-full p-2 border rounded-lg"
+              style={{
+                width: '100%',
+                padding: '12px 16px',
+                border: '1px solid #d1d5db',
+                borderRadius: '8px',
+                fontSize: '14px',
+                color: '#374151',
+                background: 'white',
+                outline: 'none',
+                transition: 'all 200ms'
+              }}
+              onFocus={(e) => {
+                e.target.style.borderColor = '#3b82f6';
+                e.target.style.boxShadow = '0 0 0 3px rgba(59, 130, 246, 0.1)';
+              }}
+              onBlur={(e) => {
+                e.target.style.borderColor = '#d1d5db';
+                e.target.style.boxShadow = 'none';
+              }}
             />
           </div>
 
           {formMode === 'register' && (
             <div>
-              <label className="block text-sm font-medium mb-1">Display Name</label>
+              <label style={{
+                display: 'block',
+                fontSize: '14px',
+                fontWeight: '500',
+                color: '#374151',
+                marginBottom: '4px'
+              }}>Display Name</label>
               <input
                 type="text"
                 name="display_name"
                 value={formData.display_name}
                 onChange={handleInputChange}
-                className="w-full p-2 border rounded-lg"
+                style={{
+                  width: '100%',
+                  padding: '12px 16px',
+                  border: '1px solid #d1d5db',
+                  borderRadius: '8px',
+                  fontSize: '14px',
+                  color: '#374151',
+                  background: 'white',
+                  outline: 'none',
+                  transition: 'all 200ms'
+                }}
+                onFocus={(e) => {
+                  e.target.style.borderColor = '#3b82f6';
+                  e.target.style.boxShadow = '0 0 0 3px rgba(59, 130, 246, 0.1)';
+                }}
+                onBlur={(e) => {
+                  e.target.style.borderColor = '#d1d5db';
+                  e.target.style.boxShadow = 'none';
+                }}
               />
             </div>
           )}
 
           {error && (
-            <div className="text-red-500 text-sm">{error}</div>
+            <div style={{
+              color: '#dc2626',
+              fontSize: '14px',
+              padding: '8px 12px',
+              background: '#fef2f2',
+              border: '1px solid #fecaca',
+              borderRadius: '8px'
+            }}>{error}</div>
           )}
 
           <button
             type="submit"
             disabled={isLoggingIn || isRegistering}
-            className="w-full py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50"
+            style={{
+              width: '100%',
+              padding: '12px 16px',
+              background: isLoggingIn || isRegistering ? '#9ca3af' : '#3b82f6',
+              color: 'white',
+              border: 'none',
+              borderRadius: '8px',
+              fontSize: '14px',
+              fontWeight: '500',
+              cursor: isLoggingIn || isRegistering ? 'not-allowed' : 'pointer',
+              transition: 'all 200ms'
+            }}
+            onMouseEnter={(e) => {
+              if (!isLoggingIn && !isRegistering) {
+                e.target.style.background = '#2563eb';
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (!isLoggingIn && !isRegistering) {
+                e.target.style.background = '#3b82f6';
+              }
+            }}
           >
             {isLoggingIn || isRegistering
               ? 'Loading...'
@@ -112,10 +257,19 @@ export const AuthModal = ({ isOpen, onClose, mode = 'login' }) => {
           </button>
         </form>
 
-        <div className="mt-4 text-center">
+        <div style={{ marginTop: '16px', textAlign: 'center' }}>
           <button
             onClick={() => setFormMode(formMode === 'login' ? 'register' : 'login')}
-            className="text-blue-500 hover:text-blue-600 text-sm"
+            style={{
+              background: 'transparent',
+              border: 'none',
+              color: '#3b82f6',
+              cursor: 'pointer',
+              fontSize: '14px',
+              transition: 'color 200ms'
+            }}
+            onMouseEnter={(e) => e.target.style.color = '#2563eb'}
+            onMouseLeave={(e) => e.target.style.color = '#3b82f6'}
           >
             {formMode === 'login'
               ? "Don't have an account? Sign up"

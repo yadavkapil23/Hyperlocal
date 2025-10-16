@@ -135,10 +135,29 @@ export const Map = ({ onEventClick, selectedEvent, filters }) => {
       </MapContainer>
       
       {/* Map controls */}
-      <div className="absolute top-4 right-4 bg-white/95 backdrop-blur-sm p-6 rounded-xl shadow-xl border border-gray-200 z-[1000] min-w-[280px]">
-        <div className="mb-4">
-          <label className="block text-sm font-semibold text-gray-800 mb-3">Search Radius</label>
-          <div className="relative">
+      <div style={{
+        position: 'absolute',
+        top: '16px',
+        right: '16px',
+        background: 'rgba(255, 255, 255, 0.95)',
+        backdropFilter: 'blur(10px)',
+        padding: '24px',
+        borderRadius: '12px',
+        boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+        border: '1px solid rgba(229, 231, 235, 0.8)',
+        zIndex: 1000,
+        minWidth: '280px',
+        fontFamily: 'system-ui, -apple-system, sans-serif'
+      }}>
+        <div style={{ marginBottom: '16px' }}>
+          <label style={{
+            display: 'block',
+            fontSize: '14px',
+            fontWeight: '600',
+            color: '#1f2937',
+            marginBottom: '12px'
+          }}>Search Radius</label>
+          <div style={{ position: 'relative' }}>
             <input
               type="range"
               min="500"
@@ -146,30 +165,75 @@ export const Map = ({ onEventClick, selectedEvent, filters }) => {
               step="500"
               value={radius}
               onChange={(e) => setRadius(Number(e.target.value))}
-              className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+              style={{
+                width: '100%',
+                height: '8px',
+                background: '#e5e7eb',
+                borderRadius: '8px',
+                appearance: 'none',
+                cursor: 'pointer',
+                outline: 'none'
+              }}
+              className="slider"
             />
-            <div className="flex justify-between text-xs text-gray-500 mt-1">
+            <div style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              fontSize: '12px',
+              color: '#6b7280',
+              marginTop: '4px'
+            }}>
               <span>500m</span>
               <span>10km</span>
             </div>
           </div>
-          <div className="text-center mt-2">
-            <span className="inline-block bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full">
+          <div style={{ textAlign: 'center', marginTop: '8px' }}>
+            <span style={{
+              display: 'inline-block',
+              background: '#dbeafe',
+              color: '#1e40af',
+              fontSize: '14px',
+              fontWeight: '500',
+              padding: '4px 12px',
+              borderRadius: '9999px'
+            }}>
               {radius}m
             </span>
           </div>
         </div>
         
         {isLoading && (
-          <div className="flex items-center justify-center py-2">
-            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-500"></div>
-            <span className="ml-2 text-sm text-gray-600">Loading events...</span>
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '8px 0'
+          }}>
+            <div style={{
+              width: '16px',
+              height: '16px',
+              border: '2px solid #e5e7eb',
+              borderTop: '2px solid #3b82f6',
+              borderRadius: '50%',
+              animation: 'spin 1s linear infinite'
+            }}></div>
+            <span style={{ marginLeft: '8px', fontSize: '14px', color: '#6b7280' }}>
+              Loading events...
+            </span>
           </div>
         )}
         
         {eventsData?.data?.results && (
-          <div className="text-center">
-            <span className="inline-block bg-green-100 text-green-800 text-sm font-medium px-3 py-1 rounded-full">
+          <div style={{ textAlign: 'center' }}>
+            <span style={{
+              display: 'inline-block',
+              background: '#dcfce7',
+              color: '#166534',
+              fontSize: '14px',
+              fontWeight: '500',
+              padding: '4px 12px',
+              borderRadius: '9999px'
+            }}>
               {eventsData.data.results.length} events found
             </span>
           </div>

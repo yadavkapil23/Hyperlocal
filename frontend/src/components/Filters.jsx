@@ -31,36 +31,128 @@ export const Filters = ({ onFiltersChange, isOpen, onToggle }) => {
       {/* Filter Toggle Button */}
       <button
         onClick={onToggle}
-        className="fixed top-4 left-4 z-10 bg-white/95 backdrop-blur-sm p-4 rounded-xl shadow-xl border border-gray-200 hover:bg-white hover:shadow-2xl transition-all duration-200"
+        style={{
+          position: 'fixed',
+          top: '16px',
+          left: '16px',
+          zIndex: 10,
+          background: 'rgba(255, 255, 255, 0.95)',
+          backdropFilter: 'blur(10px)',
+          padding: '16px',
+          borderRadius: '12px',
+          boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+          border: '1px solid rgba(229, 231, 235, 0.8)',
+          cursor: 'pointer',
+          transition: 'all 200ms',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}
+        onMouseEnter={(e) => {
+          e.target.style.background = 'white';
+          e.target.style.boxShadow = '0 25px 50px -12px rgba(0, 0, 0, 0.25)';
+        }}
+        onMouseLeave={(e) => {
+          e.target.style.background = 'rgba(255, 255, 255, 0.95)';
+          e.target.style.boxShadow = '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)';
+        }}
       >
-        <Filter size={20} className="text-gray-700" />
+        <Filter size={20} style={{ color: '#374151' }} />
       </button>
 
       {/* Filter Sidebar */}
       <div
-        className={`fixed top-0 left-0 h-full w-80 bg-white/95 backdrop-blur-sm shadow-2xl transform transition-all duration-300 z-20 ${
-          isOpen ? 'translate-x-0' : '-translate-x-full'
-        }`}
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          height: '100%',
+          width: '320px',
+          background: 'rgba(255, 255, 255, 0.95)',
+          backdropFilter: 'blur(10px)',
+          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+          transform: isOpen ? 'translateX(0)' : 'translateX(-100%)',
+          transition: 'transform 300ms ease-in-out',
+          zIndex: 20,
+          fontFamily: 'system-ui, -apple-system, sans-serif'
+        }}
       >
-        <div className="p-8 h-full flex flex-col">
-          <div className="flex justify-between items-center mb-8">
-            <h2 className="text-xl font-bold text-gray-800">Filters</h2>
+        <div style={{
+          padding: '32px',
+          height: '100%',
+          display: 'flex',
+          flexDirection: 'column'
+        }}>
+          <div style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: '32px'
+          }}>
+            <h2 style={{
+              fontSize: '20px',
+              fontWeight: '700',
+              color: '#1f2937',
+              margin: 0
+            }}>Filters</h2>
             <button
               onClick={onToggle}
-              className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+              style={{
+                padding: '8px',
+                background: 'transparent',
+                border: 'none',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                transition: 'background-color 200ms',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
+              onMouseEnter={(e) => e.target.style.background = '#f3f4f6'}
+              onMouseLeave={(e) => e.target.style.background = 'transparent'}
             >
-              <X size={20} className="text-gray-600" />
+              <X size={20} style={{ color: '#6b7280' }} />
             </button>
           </div>
 
-          <div className="space-y-8 flex-1">
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '32px',
+            flex: 1
+          }}>
             {/* Category Filter */}
             <div>
-              <label className="block text-sm font-semibold text-gray-800 mb-3">Category</label>
+              <label style={{
+                display: 'block',
+                fontSize: '14px',
+                fontWeight: '600',
+                color: '#1f2937',
+                marginBottom: '12px'
+              }}>Category</label>
               <select
                 value={filters.category}
                 onChange={(e) => handleFilterChange('category', e.target.value)}
-                className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-white"
+                style={{
+                  width: '100%',
+                  padding: '12px 16px',
+                  border: '1px solid #d1d5db',
+                  borderRadius: '12px',
+                  fontSize: '14px',
+                  color: '#374151',
+                  background: 'white',
+                  cursor: 'pointer',
+                  outline: 'none',
+                  transition: 'all 200ms'
+                }}
+                onFocus={(e) => {
+                  e.target.style.borderColor = '#3b82f6';
+                  e.target.style.boxShadow = '0 0 0 3px rgba(59, 130, 246, 0.1)';
+                }}
+                onBlur={(e) => {
+                  e.target.style.borderColor = '#d1d5db';
+                  e.target.style.boxShadow = 'none';
+                }}
               >
                 <option value="">All Categories</option>
                 {categories?.data?.map((category) => (
@@ -73,20 +165,64 @@ export const Filters = ({ onFiltersChange, isOpen, onToggle }) => {
 
             {/* Time Filter */}
             <div>
-              <label className="block text-sm font-semibold text-gray-800 mb-3">Starts After</label>
+              <label style={{
+                display: 'block',
+                fontSize: '14px',
+                fontWeight: '600',
+                color: '#1f2937',
+                marginBottom: '12px'
+              }}>Starts After</label>
               <input
                 type="datetime-local"
                 value={filters.starts_after}
                 onChange={(e) => handleFilterChange('starts_after', e.target.value)}
-                className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-white"
+                style={{
+                  width: '100%',
+                  padding: '12px 16px',
+                  border: '1px solid #d1d5db',
+                  borderRadius: '12px',
+                  fontSize: '14px',
+                  color: '#374151',
+                  background: 'white',
+                  cursor: 'pointer',
+                  outline: 'none',
+                  transition: 'all 200ms'
+                }}
+                onFocus={(e) => {
+                  e.target.style.borderColor = '#3b82f6';
+                  e.target.style.boxShadow = '0 0 0 3px rgba(59, 130, 246, 0.1)';
+                }}
+                onBlur={(e) => {
+                  e.target.style.borderColor = '#d1d5db';
+                  e.target.style.boxShadow = 'none';
+                }}
               />
             </div>
 
             {/* Clear Filters */}
-            <div className="pt-4">
+            <div style={{ paddingTop: '16px' }}>
               <button
                 onClick={clearFilters}
-                className="w-full py-3 px-4 text-gray-700 border-2 border-gray-300 rounded-xl hover:bg-gray-50 hover:border-gray-400 transition-all duration-200 font-medium"
+                style={{
+                  width: '100%',
+                  padding: '12px 16px',
+                  color: '#374151',
+                  border: '2px solid #d1d5db',
+                  borderRadius: '12px',
+                  background: 'white',
+                  cursor: 'pointer',
+                  transition: 'all 200ms',
+                  fontSize: '14px',
+                  fontWeight: '500'
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.background = '#f9fafb';
+                  e.target.style.borderColor = '#9ca3af';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.background = 'white';
+                  e.target.style.borderColor = '#d1d5db';
+                }}
               >
                 Clear Filters
               </button>
@@ -98,7 +234,16 @@ export const Filters = ({ onFiltersChange, isOpen, onToggle }) => {
       {/* Overlay */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-25 z-10"
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'rgba(0, 0, 0, 0.25)',
+            zIndex: 10,
+            cursor: 'pointer'
+          }}
           onClick={onToggle}
         />
       )}
