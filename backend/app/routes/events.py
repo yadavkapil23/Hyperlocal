@@ -6,7 +6,7 @@ from sqlalchemy import select, func, cast
 from sqlalchemy.orm import Session
 from geoalchemy2.shape import from_shape
 from shapely.geometry import Point
-from geoalchemy2 import Geography
+from geoalchemy2 import Geography, Geometry
 
 from ..db import get_db
 from ..models import Event, Category
@@ -44,12 +44,15 @@ def list_events():
     # Use ST_Distance on geography (meters) and ensure both sides are geography
     distance_expr = func.ST_Distance(Event.location, point_geog).label("distance_m")
     within_expr = func.ST_DWithin(Event.location, point_geog, radius_m)
+    # Provide latitude/longitude in response (cast geography -> geometry for ST_X/ST_Y)
+    lat_expr = func.ST_Y(cast(Event.location, Geometry)).label("latitude")
+    lon_expr = func.ST_X(cast(Event.location, Geometry)).label("longitude")
 
     results = []
     with next(get_db()) as db:  # type: Session
         # Always join Category so we can safely read slug without lazy loading
         base_stmt = (
-            select(Event, distance_expr, Category.slug)
+            select(Event, distance_expr, Category.slug, lat_expr, lon_expr)
             .join(Category, Event.category_id == Category.id)
             .where(within_expr)
         )
@@ -61,7 +64,7 @@ def list_events():
         total = db.scalar(count_stmt) or 0
         stmt = base_stmt.order_by(distance_expr, Event.starts_at).limit(limit).offset(offset)
         rows = db.execute(stmt).all()
-        for event, distance_m, cat_slug in rows:
+        for event, distance_m, cat_slug, latitude, longitude in rows:
             results.append(
                 {
                     "id": event.id,
@@ -72,6 +75,8 @@ def list_events():
                     "ends_at": event.ends_at.isoformat(),
                     "is_public": event.is_public,
                     "distance_m": float(distance_m) if distance_m is not None else None,
+                    "latitude": float(latitude) if latitude is not None else None,
+                    "longitude": float(longitude) if longitude is not None else None,
                 }
             )
 
