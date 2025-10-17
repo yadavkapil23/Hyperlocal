@@ -130,11 +130,21 @@ export const Map = ({ onEventClick, selectedEvent, filters, radius, setRadius, o
   }, [selectedEvent]);
 
   return (
-    <div className="relative w-full h-full">
+    <div
+      className="relative"
+      style={{
+        width: '100%',
+        height: '70vh',
+        maxWidth: '100%',
+        borderRadius: '8px',
+        overflow: 'hidden',
+        boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05)'
+      }}
+    >
       <MapContainer
         center={mapCenter}
         zoom={13}
-        style={{ height: '100vh', width: '100%', minHeight: '500px' }}
+        style={{ height: '100%', width: '100%', minHeight: '400px' }}
         whenCreated={(mapInstance) => {
           mapRef.current = mapInstance;
           // Update center when map moves
