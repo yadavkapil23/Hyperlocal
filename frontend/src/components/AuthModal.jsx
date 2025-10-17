@@ -40,12 +40,7 @@ export const AuthModal = ({ isOpen, onClose, mode = 'login' }) => {
     });
   };
 
-  console.log('AuthModal render - isOpen:', isOpen);
-  
-  if (!isOpen) {
-    console.log('AuthModal not rendering because isOpen is false');
-    return null;
-  }
+  if (!isOpen) return null;
 
   return (
     <div style={{
@@ -58,48 +53,36 @@ export const AuthModal = ({ isOpen, onClose, mode = 'login' }) => {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      zIndex: 50,
-      fontFamily: 'system-ui, -apple-system, sans-serif'
+      zIndex: 9999
     }}>
       <div style={{
         background: 'white',
-        borderRadius: '12px',
+        borderRadius: '8px',
         padding: '24px',
         maxWidth: '400px',
         width: '100%',
         margin: '0 16px',
-        boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
+        boxShadow: '0 10px 25px rgba(0, 0, 0, 0.2)'
       }}>
         <div style={{
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          marginBottom: '24px'
+          marginBottom: '16px'
         }}>
           <h2 style={{
             fontSize: '20px',
-            fontWeight: '700',
-            color: '#1f2937',
+            fontWeight: 'bold',
             margin: 0
           }}>
             {formMode === 'login' ? 'Log In' : 'Sign Up'}
           </h2>
-          <button
+          <span
             onClick={onClose}
-            style={{
-              background: 'transparent',
-              border: 'none',
-              color: '#6b7280',
-              cursor: 'pointer',
-              padding: '4px',
-              borderRadius: '4px',
-              transition: 'color 200ms'
-            }}
-            onMouseEnter={(e) => e.target.style.color = '#374151'}
-            onMouseLeave={(e) => e.target.style.color = '#6b7280'}
+            style={{ cursor: 'pointer', color: 'blue' }}
           >
-            <X size={20} />
-          </button>
+            Close
+          </span>
         </div>
 
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
@@ -108,7 +91,6 @@ export const AuthModal = ({ isOpen, onClose, mode = 'login' }) => {
               display: 'block',
               fontSize: '14px',
               fontWeight: '500',
-              color: '#374151',
               marginBottom: '4px'
             }}>Email</label>
             <input
@@ -119,22 +101,9 @@ export const AuthModal = ({ isOpen, onClose, mode = 'login' }) => {
               required
               style={{
                 width: '100%',
-                padding: '12px 16px',
-                border: '1px solid #d1d5db',
-                borderRadius: '8px',
-                fontSize: '14px',
-                color: '#374151',
-                background: 'white',
-                outline: 'none',
-                transition: 'all 200ms'
-              }}
-              onFocus={(e) => {
-                e.target.style.borderColor = '#3b82f6';
-                e.target.style.boxShadow = '0 0 0 3px rgba(59, 130, 246, 0.1)';
-              }}
-              onBlur={(e) => {
-                e.target.style.borderColor = '#d1d5db';
-                e.target.style.boxShadow = 'none';
+                padding: '8px',
+                border: '1px solid #ccc',
+                borderRadius: '4px'
               }}
             />
           </div>
@@ -144,7 +113,6 @@ export const AuthModal = ({ isOpen, onClose, mode = 'login' }) => {
               display: 'block',
               fontSize: '14px',
               fontWeight: '500',
-              color: '#374151',
               marginBottom: '4px'
             }}>Password</label>
             <input
@@ -155,22 +123,9 @@ export const AuthModal = ({ isOpen, onClose, mode = 'login' }) => {
               required
               style={{
                 width: '100%',
-                padding: '12px 16px',
-                border: '1px solid #d1d5db',
-                borderRadius: '8px',
-                fontSize: '14px',
-                color: '#374151',
-                background: 'white',
-                outline: 'none',
-                transition: 'all 200ms'
-              }}
-              onFocus={(e) => {
-                e.target.style.borderColor = '#3b82f6';
-                e.target.style.boxShadow = '0 0 0 3px rgba(59, 130, 246, 0.1)';
-              }}
-              onBlur={(e) => {
-                e.target.style.borderColor = '#d1d5db';
-                e.target.style.boxShadow = 'none';
+                padding: '8px',
+                border: '1px solid #ccc',
+                borderRadius: '4px'
               }}
             />
           </div>
@@ -181,7 +136,6 @@ export const AuthModal = ({ isOpen, onClose, mode = 'login' }) => {
                 display: 'block',
                 fontSize: '14px',
                 fontWeight: '500',
-                color: '#374151',
                 marginBottom: '4px'
               }}>Display Name</label>
               <input
@@ -191,90 +145,39 @@ export const AuthModal = ({ isOpen, onClose, mode = 'login' }) => {
                 onChange={handleInputChange}
                 style={{
                   width: '100%',
-                  padding: '12px 16px',
-                  border: '1px solid #d1d5db',
-                  borderRadius: '8px',
-                  fontSize: '14px',
-                  color: '#374151',
-                  background: 'white',
-                  outline: 'none',
-                  transition: 'all 200ms'
-                }}
-                onFocus={(e) => {
-                  e.target.style.borderColor = '#3b82f6';
-                  e.target.style.boxShadow = '0 0 0 3px rgba(59, 130, 246, 0.1)';
-                }}
-                onBlur={(e) => {
-                  e.target.style.borderColor = '#d1d5db';
-                  e.target.style.boxShadow = 'none';
+                  padding: '8px',
+                  border: '1px solid #ccc',
+                  borderRadius: '4px'
                 }}
               />
             </div>
           )}
 
           {error && (
-            <div style={{
-              color: '#dc2626',
-              fontSize: '14px',
-              padding: '8px 12px',
-              background: '#fef2f2',
-              border: '1px solid #fecaca',
-              borderRadius: '8px'
-            }}>{error}</div>
+            <div style={{ color: 'red', fontSize: '14px' }}>{error}</div>
           )}
 
-          <button
-            type="submit"
-            disabled={isLoggingIn || isRegistering}
-            style={{
-              width: '100%',
-              padding: '12px 16px',
-              background: isLoggingIn || isRegistering ? '#9ca3af' : '#3b82f6',
-              color: 'white',
-              border: 'none',
-              borderRadius: '8px',
-              fontSize: '14px',
-              fontWeight: '500',
-              cursor: isLoggingIn || isRegistering ? 'not-allowed' : 'pointer',
-              transition: 'all 200ms'
-            }}
-            onMouseEnter={(e) => {
-              if (!isLoggingIn && !isRegistering) {
-                e.target.style.background = '#2563eb';
-              }
-            }}
-            onMouseLeave={(e) => {
-              if (!isLoggingIn && !isRegistering) {
-                e.target.style.background = '#3b82f6';
-              }
-            }}
+          <span
+            onClick={handleSubmit}
+            style={{ cursor: 'pointer', color: 'blue' }}
           >
             {isLoggingIn || isRegistering
               ? 'Loading...'
               : formMode === 'login'
               ? 'Log In'
               : 'Sign Up'}
-          </button>
+          </span>
         </form>
 
         <div style={{ marginTop: '16px', textAlign: 'center' }}>
-          <button
+          <span
             onClick={() => setFormMode(formMode === 'login' ? 'register' : 'login')}
-            style={{
-              background: 'transparent',
-              border: 'none',
-              color: '#3b82f6',
-              cursor: 'pointer',
-              fontSize: '14px',
-              transition: 'color 200ms'
-            }}
-            onMouseEnter={(e) => e.target.style.color = '#2563eb'}
-            onMouseLeave={(e) => e.target.style.color = '#3b82f6'}
+            style={{ cursor: 'pointer', color: 'blue' }}
           >
             {formMode === 'login'
               ? "Don't have an account? Sign up"
               : 'Already have an account? Log in'}
-          </button>
+          </span>
         </div>
       </div>
     </div>

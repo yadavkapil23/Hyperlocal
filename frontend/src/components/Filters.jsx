@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { categoriesApi } from '../api/events.js';
 import { Filter, X } from 'lucide-react';
 
-export const Filters = ({ onFiltersChange, isOpen, onToggle }) => {
+export const Filters = ({ onFiltersChange, isOpen, onToggle, radius, setRadius }) => {
   const [filters, setFilters] = useState({
     category: '',
     starts_after: '',
@@ -29,36 +29,12 @@ export const Filters = ({ onFiltersChange, isOpen, onToggle }) => {
   return (
     <>
       {/* Filter Toggle Button */}
-      <button
+      <span
         onClick={onToggle}
-        style={{
-          position: 'fixed',
-          top: '16px',
-          left: '16px',
-          zIndex: 10,
-          background: 'rgba(255, 255, 255, 0.95)',
-          backdropFilter: 'blur(10px)',
-          padding: '16px',
-          borderRadius: '12px',
-          boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
-          border: '1px solid rgba(229, 231, 235, 0.8)',
-          cursor: 'pointer',
-          transition: 'all 200ms',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center'
-        }}
-        onMouseEnter={(e) => {
-          e.target.style.background = 'white';
-          e.target.style.boxShadow = '0 25px 50px -12px rgba(0, 0, 0, 0.25)';
-        }}
-        onMouseLeave={(e) => {
-          e.target.style.background = 'rgba(255, 255, 255, 0.95)';
-          e.target.style.boxShadow = '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)';
-        }}
+        style={{ cursor: 'pointer', position: 'fixed', top: '16px', left: '16px', zIndex: 10 }}
       >
-        <Filter size={20} style={{ color: '#374151' }} />
-      </button>
+        Filters
+      </span>
 
       {/* Filter Sidebar */}
       <div
@@ -68,17 +44,15 @@ export const Filters = ({ onFiltersChange, isOpen, onToggle }) => {
           left: 0,
           height: '100%',
           width: '320px',
-          background: 'rgba(255, 255, 255, 0.95)',
-          backdropFilter: 'blur(10px)',
+          background: 'white',
           boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
           transform: isOpen ? 'translateX(0)' : 'translateX(-100%)',
           transition: 'transform 300ms ease-in-out',
-          zIndex: 20,
-          fontFamily: 'system-ui, -apple-system, sans-serif'
+          zIndex: 20
         }}
       >
         <div style={{
-          padding: '32px',
+          padding: '24px',
           height: '100%',
           display: 'flex',
           flexDirection: 'column'
@@ -87,7 +61,7 @@ export const Filters = ({ onFiltersChange, isOpen, onToggle }) => {
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            marginBottom: '32px'
+            marginBottom: '24px'
           }}>
             <h2 style={{
               fontSize: '20px',
@@ -95,32 +69,71 @@ export const Filters = ({ onFiltersChange, isOpen, onToggle }) => {
               color: '#1f2937',
               margin: 0
             }}>Filters</h2>
-            <button
+            <span
               onClick={onToggle}
-              style={{
-                padding: '8px',
-                background: 'transparent',
-                border: 'none',
-                borderRadius: '8px',
-                cursor: 'pointer',
-                transition: 'background-color 200ms',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-              }}
-              onMouseEnter={(e) => e.target.style.background = '#f3f4f6'}
-              onMouseLeave={(e) => e.target.style.background = 'transparent'}
+              style={{ cursor: 'pointer' }}
             >
-              <X size={20} style={{ color: '#6b7280' }} />
-            </button>
+              Close
+            </span>
           </div>
 
           <div style={{
             display: 'flex',
             flexDirection: 'column',
-            gap: '32px',
+            gap: '24px',
             flex: 1
           }}>
+            {/* Search Radius Filter */}
+            <div>
+              <label style={{
+                display: 'block',
+                fontSize: '14px',
+                fontWeight: '600',
+                color: '#1f2937',
+                marginBottom: '12px'
+              }}>Search Radius</label>
+              <input
+                type="range"
+                min="500"
+                max="10000"
+                step="500"
+                value={radius}
+                onChange={(e) => setRadius(Number(e.target.value))}
+                style={{
+                  width: '100%',
+                  height: '8px',
+                  background: '#e5e7eb',
+                  borderRadius: '8px',
+                  appearance: 'none',
+                  cursor: 'pointer',
+                  outline: 'none'
+                }}
+              />
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                fontSize: '12px',
+                color: '#6b7280',
+                marginTop: '4px'
+              }}>
+                <span>500m</span>
+                <span>10km</span>
+              </div>
+              <div style={{ textAlign: 'center', marginTop: '8px' }}>
+                <span style={{
+                  display: 'inline-block',
+                  background: '#dbeafe',
+                  color: '#1e40af',
+                  fontSize: '14px',
+                  fontWeight: '500',
+                  padding: '4px 12px',
+                  borderRadius: '9999px'
+                }}>
+                  {radius}m
+                </span>
+              </div>
+            </div>
+
             {/* Category Filter */}
             <div>
               <label style={{
@@ -137,21 +150,12 @@ export const Filters = ({ onFiltersChange, isOpen, onToggle }) => {
                   width: '100%',
                   padding: '12px 16px',
                   border: '1px solid #d1d5db',
-                  borderRadius: '12px',
+                  borderRadius: '8px',
                   fontSize: '14px',
                   color: '#374151',
                   background: 'white',
                   cursor: 'pointer',
-                  outline: 'none',
-                  transition: 'all 200ms'
-                }}
-                onFocus={(e) => {
-                  e.target.style.borderColor = '#3b82f6';
-                  e.target.style.boxShadow = '0 0 0 3px rgba(59, 130, 246, 0.1)';
-                }}
-                onBlur={(e) => {
-                  e.target.style.borderColor = '#d1d5db';
-                  e.target.style.boxShadow = 'none';
+                  outline: 'none'
                 }}
               >
                 <option value="">All Categories</option>
@@ -180,52 +184,24 @@ export const Filters = ({ onFiltersChange, isOpen, onToggle }) => {
                   width: '100%',
                   padding: '12px 16px',
                   border: '1px solid #d1d5db',
-                  borderRadius: '12px',
+                  borderRadius: '8px',
                   fontSize: '14px',
                   color: '#374151',
                   background: 'white',
                   cursor: 'pointer',
-                  outline: 'none',
-                  transition: 'all 200ms'
-                }}
-                onFocus={(e) => {
-                  e.target.style.borderColor = '#3b82f6';
-                  e.target.style.boxShadow = '0 0 0 3px rgba(59, 130, 246, 0.1)';
-                }}
-                onBlur={(e) => {
-                  e.target.style.borderColor = '#d1d5db';
-                  e.target.style.boxShadow = 'none';
+                  outline: 'none'
                 }}
               />
             </div>
 
             {/* Clear Filters */}
             <div style={{ paddingTop: '16px' }}>
-              <button
+              <span
                 onClick={clearFilters}
-                style={{
-                  width: '100%',
-                  padding: '12px 16px',
-                  color: '#374151',
-                  border: '2px solid #d1d5db',
-                  borderRadius: '12px',
-                  background: 'white',
-                  cursor: 'pointer',
-                  transition: 'all 200ms',
-                  fontSize: '14px',
-                  fontWeight: '500'
-                }}
-                onMouseEnter={(e) => {
-                  e.target.style.background = '#f9fafb';
-                  e.target.style.borderColor = '#9ca3af';
-                }}
-                onMouseLeave={(e) => {
-                  e.target.style.background = 'white';
-                  e.target.style.borderColor = '#d1d5db';
-                }}
+                style={{ cursor: 'pointer' }}
               >
                 Clear Filters
-              </button>
+              </span>
             </div>
           </div>
         </div>
@@ -234,16 +210,7 @@ export const Filters = ({ onFiltersChange, isOpen, onToggle }) => {
       {/* Overlay */}
       {isOpen && (
         <div
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: 'rgba(0, 0, 0, 0.25)',
-            zIndex: 10,
-            cursor: 'pointer'
-          }}
+          className="fixed inset-0 bg-black bg-opacity-25 z-10"
           onClick={onToggle}
         />
       )}

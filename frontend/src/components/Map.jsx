@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMap, CircleMarker } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useQuery } from '@tanstack/react-query';
@@ -38,8 +38,8 @@ const MapEvents = ({ onEventClick, selectedEvent, eventsData }) => {
       // Fit map to show all events
       const bounds = L.latLngBounds();
       eventsData.data.results.forEach(event => {
-        const lat = event.latitude || event.lat || 0;
-        const lng = event.longitude || event.lng || 0;
+        const lat = Number(event.latitude ?? event.lat ?? 0);
+        const lng = Number(event.longitude ?? event.lng ?? 0);
         if (lat && lng && lat !== 0 && lng !== 0) {
           bounds.extend([lat, lng]);
         }
@@ -64,6 +64,7 @@ const MapEvents = ({ onEventClick, selectedEvent, eventsData }) => {
         }
         
         return (
+          <>
           <Marker
             key={event.id}
             position={[lat, lng]}
@@ -86,15 +87,17 @@ const MapEvents = ({ onEventClick, selectedEvent, eventsData }) => {
               </div>
             </Popup>
           </Marker>
+          {/* simple visible dot to ensure markers are noticeable */}
+          <CircleMarker center={[lat, lng]} radius={6} pathOptions={{ color: '#1e40af', fillColor: '#3b82f6', fillOpacity: 0.8 }} />
+          </>
         );
       })}
     </>
   );
 };
 
-export const Map = ({ onEventClick, selectedEvent, filters }) => {
+export const Map = ({ onEventClick, selectedEvent, filters, radius, setRadius }) => {
   const [mapCenter, setMapCenter] = useState([37.7749, -122.4194]); // San Francisco
-  const [radius, setRadius] = useState(2000);
 
   // Get events near map center
   const { data: eventsData, isLoading } = useQuery({
@@ -139,66 +142,54 @@ export const Map = ({ onEventClick, selectedEvent, filters }) => {
         position: 'absolute',
         top: '16px',
         right: '16px',
-        background: 'rgba(255, 255, 255, 0.95)',
-        backdropFilter: 'blur(10px)',
-        padding: '24px',
-        borderRadius: '12px',
-        boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
-        border: '1px solid rgba(229, 231, 235, 0.8)',
+        background: 'white',
+        padding: '16px',
+        borderRadius: '8px',
+        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
         zIndex: 1000,
-        minWidth: '280px',
-        fontFamily: 'system-ui, -apple-system, sans-serif'
+        minWidth: '200px'
       }}>
         <div style={{ marginBottom: '16px' }}>
           <label style={{
             display: 'block',
             fontSize: '14px',
-            fontWeight: '600',
-            color: '#1f2937',
-            marginBottom: '12px'
+            fontWeight: '500',
+            marginBottom: '8px',
+            color: '#374151'
           }}>Search Radius</label>
-          <div style={{ position: 'relative' }}>
-            <input
-              type="range"
-              min="500"
-              max="10000"
-              step="500"
-              value={radius}
-              onChange={(e) => setRadius(Number(e.target.value))}
-              style={{
-                width: '100%',
-                height: '8px',
-                background: '#e5e7eb',
-                borderRadius: '8px',
-                appearance: 'none',
-                cursor: 'pointer',
-                outline: 'none'
-              }}
-              className="slider"
-            />
-            <div style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              fontSize: '12px',
-              color: '#6b7280',
-              marginTop: '4px'
-            }}>
-              <span>500m</span>
-              <span>10km</span>
-            </div>
+          <input
+            type="range"
+            min="500"
+            max="10000"
+            step="500"
+            value={radius}
+            onChange={(e) => setRadius(Number(e.target.value))}
+            style={{
+              width: '100%',
+              height: '6px',
+              background: '#e5e7eb',
+              borderRadius: '3px',
+              appearance: 'none',
+              cursor: 'pointer',
+              outline: 'none'
+            }}
+          />
+          <div style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            fontSize: '12px',
+            color: '#6b7280',
+            marginTop: '4px'
+          }}>
+            <span>500m</span>
+            <span>10km</span>
           </div>
           <div style={{ textAlign: 'center', marginTop: '8px' }}>
             <span style={{
-              display: 'inline-block',
-              background: '#dbeafe',
-              color: '#1e40af',
               fontSize: '14px',
               fontWeight: '500',
-              padding: '4px 12px',
-              borderRadius: '9999px'
-            }}>
-              {radius}m
-            </span>
+              color: '#1f2937'
+            }}>{radius}m</span>
           </div>
         </div>
         
@@ -226,13 +217,9 @@ export const Map = ({ onEventClick, selectedEvent, filters }) => {
         {eventsData?.data?.results && (
           <div style={{ textAlign: 'center' }}>
             <span style={{
-              display: 'inline-block',
-              background: '#dcfce7',
-              color: '#166534',
               fontSize: '14px',
               fontWeight: '500',
-              padding: '4px 12px',
-              borderRadius: '9999px'
+              color: '#059669'
             }}>
               {eventsData.data.results.length} events found
             </span>
