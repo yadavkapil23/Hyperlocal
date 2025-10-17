@@ -161,6 +161,11 @@ function AppContent() {
               <strong>Events nearby</strong>
             </div>
             <div id="events-list" style={{ padding: '8px 12px' }} />
+            {!isAuthenticated && (
+              <div style={{ padding: '12px 16px', borderTop: '1px solid #e5e7eb' }}>
+                <AuthModal isOpen={true} onClose={() => {}} variant="panel" />
+              </div>
+            )}
           </div>
         </div>
 
