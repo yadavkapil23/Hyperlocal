@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap, CircleMarker } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -96,8 +96,9 @@ const MapEvents = ({ onEventClick, selectedEvent, eventsData }) => {
   );
 };
 
-export const Map = ({ onEventClick, selectedEvent, filters, radius, setRadius }) => {
+export const Map = ({ onEventClick, selectedEvent, filters, radius, setRadius, onEventsLoaded }) => {
   const [mapCenter, setMapCenter] = useState([37.7749, -122.4194]); // San Francisco
+  const mapRef = useRef(null);
 
   // Get events near map center
   const { data: eventsData, isLoading } = useQuery({
@@ -111,6 +112,23 @@ export const Map = ({ onEventClick, selectedEvent, filters, radius, setRadius })
     }),
   });
 
+  // Notify parent when events load
+  useEffect(() => {
+    if (onEventsLoaded) {
+      onEventsLoaded(eventsData?.data?.results || []);
+    }
+  }, [eventsData, onEventsLoaded]);
+
+  // Fly to selected event when set
+  useEffect(() => {
+    if (!selectedEvent || !mapRef.current) return;
+    const lat = Number(selectedEvent.latitude ?? selectedEvent.lat ?? 0);
+    const lng = Number(selectedEvent.longitude ?? selectedEvent.lng ?? 0);
+    if (lat && lng) {
+      mapRef.current.flyTo([lat, lng], 15, { duration: 0.6 });
+    }
+  }, [selectedEvent]);
+
   return (
     <div className="relative w-full h-full">
       <MapContainer
@@ -118,6 +136,7 @@ export const Map = ({ onEventClick, selectedEvent, filters, radius, setRadius })
         zoom={13}
         style={{ height: '100vh', width: '100%', minHeight: '500px' }}
         whenCreated={(mapInstance) => {
+          mapRef.current = mapInstance;
           // Update center when map moves
           mapInstance.on('moveend', () => {
             const center = mapInstance.getCenter();
