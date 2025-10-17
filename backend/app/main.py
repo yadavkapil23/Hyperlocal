@@ -12,8 +12,24 @@ from .routes.rsvp import rsvp_bp
 
 def create_app() -> Flask:
     app = Flask(__name__)
-    # Allow Vite dev servers on common ports
-    CORS(app, resources={r"/api/*": {"origins": ["http://localhost:5173", "http://localhost:5174"]}})
+    # Allow specific dev origins with credentials (Authorization header)
+    CORS(
+        app,
+        resources={
+            r"/api/*": {
+                "origins": [
+                    "http://localhost:5174",
+                    "http://127.0.0.1:5174",
+                    "http://localhost:5173",
+                    "http://127.0.0.1:5173",
+                ]
+            }
+        },
+        supports_credentials=True,
+        allow_headers=["Content-Type", "Authorization"],
+        expose_headers=["Content-Type"],
+        methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    )
     app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY", "dev-secret-change-me")
     JWTManager(app)
 
