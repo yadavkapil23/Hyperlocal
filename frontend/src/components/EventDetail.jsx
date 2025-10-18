@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { eventsApi } from '../api/events.js';
 import { useAuth } from '../hooks/useAuth.js';
-import { MapPin, Calendar, Users, X } from 'lucide-react';
+import { MapPin, Calendar, Users, X, Trash2 } from 'lucide-react';
 
 export const EventDetail = ({ event, onClose }) => {
   const { isAuthenticated } = useAuth();
@@ -34,6 +34,14 @@ export const EventDetail = ({ event, onClose }) => {
     },
   });
 
+  const deleteMutation = useMutation({
+    mutationFn: () => eventsApi.deleteEvent(event.id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['events'] });
+      onClose(); // Close the modal after successful deletion
+    },
+  });
+
   const handleRsvp = async () => {
     if (!isAuthenticated) {
       alert('Please log in to RSVP');
@@ -55,67 +63,218 @@ export const EventDetail = ({ event, onClose }) => {
     }
   };
 
+  const handleDelete = async () => {
+    if (!isAuthenticated) {
+      alert('Please log in to delete events');
+      return;
+    }
+
+    if (!confirm('Are you sure you want to delete this event? This action cannot be undone.')) {
+      return;
+    }
+
+    try {
+      await deleteMutation.mutateAsync();
+    } catch (error) {
+      console.error('Delete error:', error);
+      alert('Failed to delete event. Please try again.');
+    }
+  };
+
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleString();
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4 max-h-[80vh] overflow-y-auto">
-        <div className="flex justify-between items-start mb-4">
-          <h2 className="text-xl font-bold">{event.title}</h2>
+    <div style={{
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      zIndex: 9999,
+      padding: '16px'
+    }}>
+      <div style={{
+        backgroundColor: 'white',
+        borderRadius: '12px',
+        padding: '24px',
+        maxWidth: '600px',
+        width: '100%',
+        maxHeight: '90vh',
+        overflowY: 'auto',
+        boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+        position: 'relative'
+      }}>
+        <div style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'flex-start',
+          marginBottom: '16px'
+        }}>
+          <h2 style={{
+            fontSize: '24px',
+            fontWeight: 'bold',
+            margin: 0,
+            color: '#1f2937'
+          }}>{event.title}</h2>
           <button
             onClick={onClose}
-            className="text-gray-500 hover:text-gray-700"
+            style={{
+              background: 'none',
+              border: 'none',
+              color: '#6b7280',
+              cursor: 'pointer',
+              padding: '4px',
+              borderRadius: '4px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
+            onMouseOver={(e) => e.target.style.color = '#374151'}
+            onMouseOut={(e) => e.target.style.color = '#6b7280'}
           >
             <X size={20} />
           </button>
         </div>
 
         {event.description && (
-          <p className="text-gray-700 mb-4">{event.description}</p>
+          <p style={{
+            color: '#374151',
+            marginBottom: '16px',
+            fontSize: '16px',
+            lineHeight: '1.5'
+          }}>{event.description}</p>
         )}
 
-        <div className="space-y-3 mb-6">
-          <div className="flex items-center text-sm text-gray-600">
-            <MapPin size={16} className="mr-2" />
+        <div style={{ marginBottom: '24px' }}>
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            fontSize: '14px',
+            color: '#6b7280',
+            marginBottom: '12px'
+          }}>
+            <MapPin size={16} style={{ marginRight: '8px' }} />
             <span>Category: {event.category}</span>
           </div>
           
-          <div className="flex items-center text-sm text-gray-600">
-            <Calendar size={16} className="mr-2" />
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            fontSize: '14px',
+            color: '#6b7280',
+            marginBottom: '12px'
+          }}>
+            <Calendar size={16} style={{ marginRight: '8px' }} />
             <span>Starts: {formatDate(event.starts_at)}</span>
           </div>
           
-          <div className="flex items-center text-sm text-gray-600">
-            <Calendar size={16} className="mr-2" />
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            fontSize: '14px',
+            color: '#6b7280'
+          }}>
+            <Calendar size={16} style={{ marginRight: '8px' }} />
             <span>Ends: {formatDate(event.ends_at)}</span>
           </div>
 
           {event.distance_m && (
-            <div className="flex items-center text-sm text-gray-600">
-              <MapPin size={16} className="mr-2" />
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              fontSize: '14px',
+              color: '#6b7280',
+              marginTop: '12px'
+            }}>
+              <MapPin size={16} style={{ marginRight: '8px' }} />
               <span>{Math.round(event.distance_m)}m away</span>
             </div>
           )}
         </div>
 
-        <div className="flex gap-3">
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '12px'
+        }}>
           <button
             onClick={handleRsvp}
             disabled={isRsvping}
-            className={`flex-1 py-2 px-4 rounded-lg font-medium ${
-              isRsvped
-                ? 'bg-red-500 hover:bg-red-600 text-white'
-                : 'bg-blue-500 hover:bg-blue-600 text-white'
-            } disabled:opacity-50`}
+            style={{
+              flex: 1,
+              padding: '12px 16px',
+              borderRadius: '8px',
+              fontWeight: '500',
+              backgroundColor: isRsvped ? '#ef4444' : '#3b82f6',
+              color: 'white',
+              border: 'none',
+              cursor: isRsvping ? 'not-allowed' : 'pointer',
+              opacity: isRsvping ? 0.5 : 1,
+              fontSize: '16px'
+            }}
+            onMouseOver={(e) => {
+              if (!isRsvping) {
+                e.target.style.backgroundColor = isRsvped ? '#dc2626' : '#2563eb';
+              }
+            }}
+            onMouseOut={(e) => {
+              if (!isRsvping) {
+                e.target.style.backgroundColor = isRsvped ? '#ef4444' : '#3b82f6';
+              }
+            }}
           >
             {isRsvping ? 'Loading...' : isRsvped ? 'Un-RSVP' : 'RSVP'}
           </button>
+          
+          {isAuthenticated && (
+            <button
+              onClick={handleDelete}
+              disabled={deleteMutation.isPending}
+              style={{
+                backgroundColor: '#dc2626',
+                color: 'white',
+                padding: '12px 16px',
+                borderRadius: '8px',
+                fontWeight: '500',
+                border: 'none',
+                cursor: deleteMutation.isPending ? 'not-allowed' : 'pointer',
+                opacity: deleteMutation.isPending ? 0.5 : 1,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+                fontSize: '16px'
+              }}
+              onMouseOver={(e) => {
+                if (!deleteMutation.isPending) {
+                  e.target.style.backgroundColor = '#b91c1c';
+                }
+              }}
+              onMouseOut={(e) => {
+                if (!deleteMutation.isPending) {
+                  e.target.style.backgroundColor = '#dc2626';
+                }
+              }}
+            >
+              <Trash2 size={16} />
+              {deleteMutation.isPending ? 'Deleting...' : 'Delete'}
+            </button>
+          )}
         </div>
 
         {!isAuthenticated && (
-          <p className="text-sm text-gray-500 mt-3">
+          <p style={{
+            fontSize: '14px',
+            color: '#6b7280',
+            marginTop: '12px',
+            textAlign: 'center'
+          }}>
             Log in to RSVP to events
           </p>
         )}
