@@ -12,7 +12,11 @@ from sqlalchemy.orm import sessionmaker
 sys.path.append(os.path.abspath("."))
 
 def get_database_url():
-    return os.getenv('DATABASE_URL', 'postgresql+psycopg://thirdplace:thirdplace@db:5432/thirdplace')
+    url = os.getenv('DATABASE_URL', 'postgresql+psycopg://thirdplace:thirdplace@db:5432/thirdplace')
+    # Convert postgresql:// to postgresql+psycopg:// for psycopg driver
+    if url.startswith("postgresql://") and "+psycopg" not in url:
+        url = url.replace("postgresql://", "postgresql+psycopg://", 1)
+    return url
 
 def seed_events():
     """Create some test events"""
