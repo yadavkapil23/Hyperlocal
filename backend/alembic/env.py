@@ -29,6 +29,9 @@ def run_migrations_offline():
         "DATABASE_URL",
         config.get_main_option("sqlalchemy.url"),
     )
+    # Convert postgresql:// to postgresql+psycopg:// for psycopg driver
+    if url.startswith("postgresql://") and "+psycopg" not in url:
+        url = url.replace("postgresql://", "postgresql+psycopg://", 1)
     context.configure(
         url=url,
         target_metadata=target_metadata,
@@ -42,9 +45,11 @@ def run_migrations_offline():
 
 def run_migrations_online():
     configuration = config.get_section(config.config_ini_section)
-    configuration["sqlalchemy.url"] = os.getenv(
-        "DATABASE_URL", configuration["sqlalchemy.url"]
-    )
+    url = os.getenv("DATABASE_URL", configuration["sqlalchemy.url"])
+    # Convert postgresql:// to postgresql+psycopg:// for psycopg driver
+    if url.startswith("postgresql://") and "+psycopg" not in url:
+        url = url.replace("postgresql://", "postgresql+psycopg://", 1)
+    configuration["sqlalchemy.url"] = url
     connectable = engine_from_config(
         configuration,
         prefix="sqlalchemy.",
