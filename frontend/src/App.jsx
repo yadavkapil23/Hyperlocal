@@ -25,7 +25,7 @@ function AppContent() {
   const [filters, setFilters] = useState({});
   const [radius, setRadius] = useState(2000);
   
-  const { user, isAuthenticated, logout } = useAuth();
+  const { user, isAuthenticated, logout, refreshAuth } = useAuth();
 
   const handleEventClick = (event) => {
     setSelectedEvent(event);
@@ -93,6 +93,20 @@ function AppContent() {
                 >
                   Logout
                 </span>
+                <button
+                  onClick={refreshAuth}
+                  style={{
+                    background: '#10b981',
+                    color: 'white',
+                    border: 'none',
+                    padding: '4px 8px',
+                    borderRadius: '4px',
+                    fontSize: '12px',
+                    cursor: 'pointer'
+                  }}
+                >
+                  Refresh Auth
+                </button>
               </div>
             ) : (
               <button

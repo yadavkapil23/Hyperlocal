@@ -13,23 +13,38 @@ export const AuthModal = ({ isOpen, onClose, mode = 'login', variant = 'modal' }
 
   const { login, register, isLoggingIn, isRegistering } = useAuth();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     setError('');
 
-    try {
-      if (formMode === 'login') {
-        await login({ email: formData.email, password: formData.password });
-      } else {
-        await register({
+    if (formMode === 'login') {
+      login(
+        { email: formData.email, password: formData.password },
+        {
+          onSuccess: () => {
+            onClose();
+          },
+          onError: (err) => {
+            setError(err.response?.data?.detail || 'An error occurred');
+          }
+        }
+      );
+    } else {
+      register(
+        {
           email: formData.email,
           password: formData.password,
           display_name: formData.display_name,
-        });
-      }
-      onClose();
-    } catch (err) {
-      setError(err.response?.data?.detail || 'An error occurred');
+        },
+        {
+          onSuccess: () => {
+            onClose();
+          },
+          onError: (err) => {
+            setError(err.response?.data?.detail || 'An error occurred');
+          }
+        }
+      );
     }
   };
 
