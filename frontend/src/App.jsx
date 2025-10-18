@@ -55,34 +55,34 @@ function AppContent() {
                 {isAuthenticated && (
                   <button
                     onClick={() => setShowCreateEvent(true)}
-                    className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-6 py-3 rounded-xl font-bold transition-all duration-300 flex items-center space-x-2 shadow-lg hover:shadow-xl transform hover:scale-105"
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center space-x-2"
                   >
-                    <span className="text-xl">✨</span>
+                    <span>+</span>
                     <span>Create Event</span>
                   </button>
                 )}
                 
                 {isAuthenticated ? (
                   <div className="flex items-center space-x-3">
-                    <div className="flex items-center space-x-2 bg-gradient-to-r from-yellow-100 to-pink-100 px-4 py-3 rounded-xl border-2 border-yellow-300 shadow-lg">
-                      <User size={18} className="text-purple-600" />
-                      <span className="text-sm font-bold text-purple-800">
+                    <div className="flex items-center space-x-2 bg-gray-100 px-3 py-2 rounded-lg">
+                      <User size={16} className="text-gray-600" />
+                      <span className="text-sm font-medium text-gray-700">
                         {user?.display_name || user?.email}
                       </span>
                     </div>
                     <button
                       onClick={logout}
-                      className="bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 text-white px-4 py-3 rounded-xl font-bold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+                      className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors duration-200"
                     >
-                      <LogOut size={18} />
+                      <LogOut size={16} />
                     </button>
                   </div>
                 ) : (
                   <button
                     onClick={() => setShowAuthModal(true)}
-                    className="bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white px-6 py-3 rounded-xl font-bold transition-all duration-300 flex items-center space-x-2 shadow-lg hover:shadow-xl transform hover:scale-105"
+                    className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center space-x-2"
                   >
-                    <LogIn size={18} />
+                    <LogIn size={16} />
                     <span>Login</span>
                   </button>
                 )}
@@ -93,14 +93,8 @@ function AppContent() {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Map Section */}
-          <div className="bg-gradient-to-br from-blue-50 to-purple-50 p-6 rounded-2xl shadow-2xl border-4 border-blue-200">
-            <h2 className="text-2xl font-bold text-purple-800 mb-4 flex items-center">
-              <span className="text-3xl mr-2">🗺️</span>
-              Interactive Map
-            </h2>
-          <div>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="lg:col-span-2">
             <Map 
               onEventClick={handleEventClick}
               selectedEvent={selectedEvent}
@@ -136,34 +130,33 @@ function AppContent() {
               }}
             />
           </div>
-          <div style={{
-            background: 'linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%)',
-            borderRadius: '20px',
-            boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+          <div className="lg:col-span-1 relative" style={{
+            background: 'white',
+            borderRadius: '12px',
+            boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
             maxHeight: '75vh',
             overflowY: 'auto',
-            minWidth: '350px',
-            border: '4px solid #f093fb'
+            minWidth: '300px',
+            border: '1px solid #e5e7eb'
           }}>
             <div style={{ 
-              padding: '20px 24px', 
-              borderBottom: '3px solid #f093fb',
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-              borderRadius: '20px 20px 0 0'
+              padding: '16px 20px', 
+              borderBottom: '1px solid #e5e7eb',
+              background: '#f8fafc',
+              borderRadius: '12px 12px 0 0'
             }}>
               <h3 style={{ 
                 margin: 0, 
-                fontSize: '22px', 
-                fontWeight: 'bold', 
-                color: 'white',
-                textShadow: '2px 2px 4px rgba(0,0,0,0.3)'
+                fontSize: '18px', 
+                fontWeight: '600', 
+                color: '#1f2937' 
               }}>
-                🎉 Events nearby
+                Events nearby
               </h3>
             </div>
-            <div id="events-list" style={{ padding: '16px 20px', background: 'rgba(255,255,255,0.8)' }} />
+            <div id="events-list" style={{ padding: '12px 16px' }} />
             {!isAuthenticated && (
-              <div style={{ padding: '16px 20px', borderTop: '3px solid #f093fb', background: 'linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%)' }}>
+              <div style={{ padding: '12px 16px', borderTop: '1px solid #e5e7eb', overflow: 'hidden' }}>
                 <AuthModal isOpen={true} onClose={() => {}} variant="panel" />
               </div>
             )}

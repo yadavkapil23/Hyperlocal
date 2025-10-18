@@ -63,7 +63,7 @@ export const AuthModal = ({ isOpen, onClose, mode = 'login', variant = 'modal' }
 
   if (variant === 'panel') {
     return (
-      <div className="bg-gradient-to-br from-pink-100 to-purple-100 rounded-2xl shadow-2xl p-6 w-full border-4 border-pink-300">
+      <div className="bg-gradient-to-br from-pink-100 to-purple-100 rounded-2xl shadow-2xl p-6 w-full border-4 border-pink-300 relative z-10">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold text-purple-800 m-0 flex items-center">
             <span className="text-3xl mr-3">
