@@ -4,7 +4,7 @@ from geoalchemy2 import Geography
 
 
 revision = "20251016_0001_initial"
-down_revision = None
+down_revision = "20251016_0000_enable_postgis"
 branch_labels = None
 depends_on = None
 
