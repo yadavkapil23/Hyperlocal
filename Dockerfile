@@ -40,6 +40,9 @@ RUN echo '#!/bin/bash\n\
 set -e\n\
 echo "Running database migrations..."\n\
 alembic upgrade head\n\
+echo "Seeding database with sample data..."\n\
+python -m app.scripts.seed_categories\n\
+python -m app.scripts.seed_events\n\
 echo "Starting application..."\n\
 exec gunicorn app.wsgi:app -w 2 -k gthread -b 0.0.0.0:5000' > /app/start.sh && \
     chmod +x /app/start.sh
