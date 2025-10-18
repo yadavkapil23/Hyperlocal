@@ -59,191 +59,173 @@ export const AuthModal = ({ isOpen, onClose, mode = 'login', variant = 'modal' }
 
   if (variant === 'panel') {
     return (
-      <div style={{
-        background: 'white',
-        borderRadius: '8px',
-        padding: '24px',
-        width: '100%',
-        boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05)'
-      }}>
-        <div style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginBottom: '16px'
-        }}>
-          <h2 style={{ fontSize: '20px', fontWeight: 'bold', margin: 0 }}>
+      <div className="bg-white rounded-xl shadow-lg p-6 w-full">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-xl font-bold text-gray-900 m-0">
             {formMode === 'login' ? 'Log In' : 'Sign Up'}
           </h2>
-          <span onClick={onClose} style={{ cursor: 'pointer', color: 'blue' }}>Close</span>
+          <button
+            onClick={onClose}
+            className="text-gray-400 hover:text-gray-600 p-2 rounded-lg hover:bg-gray-100 transition-colors duration-200"
+          >
+            <X size={20} />
+          </button>
         </div>
 
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label style={{ display: 'block', fontSize: '14px', fontWeight: '500', marginBottom: '4px' }}>Email</label>
-            <input type="email" name="email" value={formData.email} onChange={handleInputChange} required style={{ width: '100%', padding: '8px', border: '1px solid #ccc', borderRadius: '4px' }} />
+            <label className="block text-sm font-semibold text-gray-700 mb-2">Email</label>
+            <input 
+              type="email" 
+              name="email" 
+              value={formData.email} 
+              onChange={handleInputChange} 
+              required 
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200"
+              placeholder="Enter your email"
+            />
           </div>
           <div>
-            <label style={{ display: 'block', fontSize: '14px', fontWeight: '500', marginBottom: '4px' }}>Password</label>
-            <input type="password" name="password" value={formData.password} onChange={handleInputChange} required style={{ width: '100%', padding: '8px', border: '1px solid #ccc', borderRadius: '4px' }} />
+            <label className="block text-sm font-semibold text-gray-700 mb-2">Password</label>
+            <input 
+              type="password" 
+              name="password" 
+              value={formData.password} 
+              onChange={handleInputChange} 
+              required 
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200"
+              placeholder="Enter your password"
+            />
           </div>
           {formMode === 'register' && (
             <div>
-              <label style={{ display: 'block', fontSize: '14px', fontWeight: '500', marginBottom: '4px' }}>Display Name</label>
-              <input type="text" name="display_name" value={formData.display_name} onChange={handleInputChange} style={{ width: '100%', padding: '8px', border: '1px solid #ccc', borderRadius: '4px' }} />
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Display Name</label>
+              <input 
+                type="text" 
+                name="display_name" 
+                value={formData.display_name} 
+                onChange={handleInputChange} 
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200"
+                placeholder="Enter your display name"
+              />
             </div>
           )}
-          {error && (<div style={{ color: 'red', fontSize: '14px' }}>{error}</div>)}
-          <button type="submit" style={{ background: 'blue', color: 'white', border: 'none', borderRadius: '4px', padding: '10px', cursor: 'pointer' }}>
-            {isLoggingIn || isRegistering ? 'Loading...' : formMode === 'login' ? 'Log In' : 'Sign Up'}
+          {error && (
+            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+              {error}
+            </div>
+          )}
+          <button 
+            type="submit" 
+            disabled={isLoggingIn || isRegistering}
+            className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2"
+          >
+            {isLoggingIn || isRegistering ? (
+              <>
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                <span>Loading...</span>
+              </>
+            ) : (
+              <span>{formMode === 'login' ? 'Log In' : 'Sign Up'}</span>
+            )}
           </button>
         </form>
 
-        <div style={{ marginTop: '16px', textAlign: 'center' }}>
-          <span onClick={() => setFormMode(formMode === 'login' ? 'register' : 'login')} style={{ cursor: 'pointer', color: 'blue' }}>
+        <div className="mt-6 text-center">
+          <button
+            onClick={() => setFormMode(formMode === 'login' ? 'register' : 'login')}
+            className="text-blue-600 hover:text-blue-700 font-medium transition-colors duration-200"
+          >
             {formMode === 'login' ? "Don't have an account? Sign up" : 'Already have an account? Log in'}
-          </span>
+          </button>
         </div>
       </div>
     );
   }
 
   return (
-    <div style={{
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      background: 'rgba(0, 0, 0, 0.5)',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      zIndex: 9999
-    }}>
-      <div style={{
-        background: 'white',
-        borderRadius: '8px',
-        padding: '24px',
-        maxWidth: '400px',
-        width: '100%',
-        margin: '0 16px',
-        boxShadow: '0 10px 25px rgba(0, 0, 0, 0.2)'
-      }}>
-        <div style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginBottom: '16px'
-        }}>
-          <h2 style={{
-            fontSize: '20px',
-            fontWeight: 'bold',
-            margin: 0
-          }}>
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-xl shadow-2xl max-w-md w-full">
+        <div className="flex justify-between items-center p-6 border-b border-gray-200">
+          <h2 className="text-xl font-bold text-gray-900 m-0">
             {formMode === 'login' ? 'Log In' : 'Sign Up'}
           </h2>
-          <span
+          <button
             onClick={onClose}
-            style={{ cursor: 'pointer', color: 'blue' }}
+            className="text-gray-400 hover:text-gray-600 p-2 rounded-lg hover:bg-gray-100 transition-colors duration-200"
           >
-            Close
-          </span>
+            <X size={20} />
+          </button>
         </div>
 
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          <div>
-            <label style={{
-              display: 'block',
-              fontSize: '14px',
-              fontWeight: '500',
-              marginBottom: '4px'
-            }}>Email</label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleInputChange}
-              required
-              style={{
-                width: '100%',
-                padding: '8px',
-                border: '1px solid #ccc',
-                borderRadius: '4px'
-              }}
-            />
-          </div>
-
-          <div>
-            <label style={{
-              display: 'block',
-              fontSize: '14px',
-              fontWeight: '500',
-              marginBottom: '4px'
-            }}>Password</label>
-            <input
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleInputChange}
-              required
-              style={{
-                width: '100%',
-                padding: '8px',
-                border: '1px solid #ccc',
-                borderRadius: '4px'
-              }}
-            />
-          </div>
-
-          {formMode === 'register' && (
+        <div className="p-6">
+          <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label style={{
-                display: 'block',
-                fontSize: '14px',
-                fontWeight: '500',
-                marginBottom: '4px'
-              }}>Display Name</label>
-              <input
-                type="text"
-                name="display_name"
-                value={formData.display_name}
-                onChange={handleInputChange}
-                style={{
-                  width: '100%',
-                  padding: '8px',
-                  border: '1px solid #ccc',
-                  borderRadius: '4px'
-                }}
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Email</label>
+              <input 
+                type="email" 
+                name="email" 
+                value={formData.email} 
+                onChange={handleInputChange} 
+                required 
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200"
+                placeholder="Enter your email"
               />
             </div>
-          )}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Password</label>
+              <input 
+                type="password" 
+                name="password" 
+                value={formData.password} 
+                onChange={handleInputChange} 
+                required 
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200"
+                placeholder="Enter your password"
+              />
+            </div>
+            {formMode === 'register' && (
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Display Name</label>
+                <input 
+                  type="text" 
+                  name="display_name" 
+                  value={formData.display_name} 
+                  onChange={handleInputChange} 
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200"
+                  placeholder="Enter your display name"
+                />
+              </div>
+            )}
+            {error && (
+              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+                {error}
+              </div>
+            )}
+            <button 
+              type="submit" 
+              disabled={isLoggingIn || isRegistering}
+              className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2"
+            >
+              {isLoggingIn || isRegistering ? (
+                <>
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                  <span>Loading...</span>
+                </>
+              ) : (
+                <span>{formMode === 'login' ? 'Log In' : 'Sign Up'}</span>
+              )}
+            </button>
+          </form>
 
-          {error && (
-            <div style={{ color: 'red', fontSize: '14px' }}>{error}</div>
-          )}
-
-          <span
-            onClick={handleSubmit}
-            style={{ cursor: 'pointer', color: 'blue' }}
-          >
-            {isLoggingIn || isRegistering
-              ? 'Loading...'
-              : formMode === 'login'
-              ? 'Log In'
-              : 'Sign Up'}
-          </span>
-        </form>
-
-        <div style={{ marginTop: '16px', textAlign: 'center' }}>
-          <span
-            onClick={() => setFormMode(formMode === 'login' ? 'register' : 'login')}
-            style={{ cursor: 'pointer', color: 'blue' }}
-          >
-            {formMode === 'login'
-              ? "Don't have an account? Sign up"
-              : 'Already have an account? Log in'}
-          </span>
+          <div className="mt-6 text-center">
+            <button
+              onClick={() => setFormMode(formMode === 'login' ? 'register' : 'login')}
+              className="text-blue-600 hover:text-blue-700 font-medium transition-colors duration-200"
+            >
+              {formMode === 'login' ? "Don't have an account? Sign up" : 'Already have an account? Log in'}
+            </button>
+          </div>
         </div>
       </div>
     </div>

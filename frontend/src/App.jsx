@@ -36,108 +36,63 @@ function AppContent() {
   };
 
   return (
-    <div className="h-screen flex flex-col">
+    <div className="min-h-screen bg-gray-50">
         {/* Header */}
-        <header style={{
-          background: 'white',
-          boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
-          borderBottom: '1px solid #e5e7eb',
-          padding: '24px',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center'
-        }}>
-          <h1 style={{
-            fontSize: '24px',
-            fontWeight: '700',
-            color: '#1f2937',
-            margin: 0
-          }}>Third-Place</h1>
-          
-          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-            {isAuthenticated && (
-              <button
-                onClick={() => setShowCreateEvent(true)}
-                style={{ 
-                  background: 'none', 
-                  border: 'none', 
-                  color: 'green', 
-                  textDecoration: 'underline',
-                  cursor: 'pointer',
-                  fontSize: 'inherit',
-                  fontFamily: 'inherit',
-                  padding: 0
-                }}
-              >
-                Create Event
-              </button>
-            )}
-            {isAuthenticated ? (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                <div style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  fontSize: '14px',
-                  color: '#374151',
-                  background: '#f3f4f6',
-                  padding: '8px 12px',
-                  borderRadius: '8px'
-                }}>
-                  <User size={16} />
-                  <span style={{ fontWeight: '500' }}>{user?.display_name || user?.email}</span>
+        <header className="bg-white shadow-lg border-b border-gray-200">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-between items-center h-16">
+              <div className="flex items-center">
+                <div className="flex-shrink-0">
+                  <h1 className="text-2xl font-bold text-gray-900">
+                    <span className="text-blue-600">Hyper</span>local
+                  </h1>
+                  <p className="text-sm text-gray-500 mt-0">Discover local events near you</p>
                 </div>
-                <span
-                  onClick={logout}
-                  style={{ cursor: 'pointer' }}
-                >
-                  Logout
-                </span>
-                <button
-                  onClick={refreshAuth}
-                  style={{
-                    background: '#10b981',
-                    color: 'white',
-                    border: 'none',
-                    padding: '4px 8px',
-                    borderRadius: '4px',
-                    fontSize: '12px',
-                    cursor: 'pointer'
-                  }}
-                >
-                  Refresh Auth
-                </button>
               </div>
-            ) : (
-              <button
-                onClick={() => setShowAuthModal(true)}
-                style={{ 
-                  background: 'none', 
-                  border: 'none', 
-                  color: 'blue', 
-                  textDecoration: 'underline',
-                  cursor: 'pointer',
-                  fontSize: 'inherit',
-                  fontFamily: 'inherit',
-                  padding: 0
-                }}
-              >
-                Login
-              </button>
-            )}
+              
+              <div className="flex items-center space-x-4">
+                {isAuthenticated && (
+                  <button
+                    onClick={() => setShowCreateEvent(true)}
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center space-x-2"
+                  >
+                    <span>+</span>
+                    <span>Create Event</span>
+                  </button>
+                )}
+                
+                {isAuthenticated ? (
+                  <div className="flex items-center space-x-3">
+                    <div className="flex items-center space-x-2 bg-gray-100 px-3 py-2 rounded-lg">
+                      <User size={16} className="text-gray-600" />
+                      <span className="text-sm font-medium text-gray-700">
+                        {user?.display_name || user?.email}
+                      </span>
+                    </div>
+                    <button
+                      onClick={logout}
+                      className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors duration-200"
+                    >
+                      <LogOut size={16} />
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => setShowAuthModal(true)}
+                    className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center space-x-2"
+                  >
+                    <LogIn size={16} />
+                    <span>Login</span>
+                  </button>
+                )}
+              </div>
+            </div>
           </div>
         </header>
 
       {/* Main Content */}
-      <main className="flex-1" style={{ padding: '16px' }}>
-        <div style={{
-          maxWidth: '1400px',
-          margin: '0 auto',
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          gap: '20px',
-          alignItems: 'start'
-        }}>
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <div>
             <Map 
               onEventClick={handleEventClick}

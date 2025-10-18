@@ -156,26 +156,11 @@ export const Map = ({ onEventClick, selectedEvent, filters, radius, setRadius, o
       </MapContainer>
       
       {/* Map controls */}
-      <div style={{
-        position: 'absolute',
-        top: '16px',
-        left: '16px',
-        background: 'white',
-        padding: '12px',
-        borderRadius: '8px',
-        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
-        zIndex: 1000,
-        minWidth: '180px',
-        maxWidth: '220px'
-      }}>
-        <div style={{ marginBottom: '12px' }}>
-          <label style={{
-            display: 'block',
-            fontSize: '13px',
-            fontWeight: '500',
-            marginBottom: '6px',
-            color: '#374151'
-          }}>Search Radius</label>
+      <div className="absolute top-4 left-4 bg-white rounded-lg shadow-lg border border-gray-200 p-4 z-10 min-w-48 max-w-56">
+        <div className="mb-3">
+          <label className="block text-sm font-semibold text-gray-700 mb-2">
+            Search Radius
+          </label>
           <input
             type="range"
             min="500"
@@ -183,63 +168,31 @@ export const Map = ({ onEventClick, selectedEvent, filters, radius, setRadius, o
             step="500"
             value={radius}
             onChange={(e) => setRadius(Number(e.target.value))}
-            style={{
-              width: '100%',
-              height: '6px',
-              background: '#e5e7eb',
-              borderRadius: '3px',
-              appearance: 'none',
-              cursor: 'pointer',
-              outline: 'none'
-            }}
+            className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
           />
-          <div style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            fontSize: '11px',
-            color: '#6b7280',
-            marginTop: '3px'
-          }}>
+          <div className="flex justify-between text-xs text-gray-500 mt-1">
             <span>500m</span>
             <span>10km</span>
           </div>
-          <div style={{ textAlign: 'center', marginTop: '6px' }}>
-            <span style={{
-              fontSize: '13px',
-              fontWeight: '500',
-              color: '#1f2937'
-            }}>{radius}m</span>
+          <div className="text-center mt-2">
+            <span className="text-sm font-semibold text-gray-900">
+              {radius}m
+            </span>
           </div>
         </div>
         
         {isLoading && (
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '8px 0'
-          }}>
-            <div style={{
-              width: '16px',
-              height: '16px',
-              border: '2px solid #e5e7eb',
-              borderTop: '2px solid #3b82f6',
-              borderRadius: '50%',
-              animation: 'spin 1s linear infinite'
-            }}></div>
-            <span style={{ marginLeft: '8px', fontSize: '14px', color: '#6b7280' }}>
+          <div className="flex items-center justify-center py-2">
+            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
+            <span className="ml-2 text-sm text-gray-600">
               Loading events...
             </span>
           </div>
         )}
         
         {eventsData?.data?.results && (
-          <div style={{ textAlign: 'center' }}>
-            <span style={{
-              fontSize: '12px',
-              fontWeight: '500',
-              color: '#059669'
-            }}>
+          <div className="text-center">
+            <span className="text-sm font-semibold text-green-600">
               {eventsData.data.results.length} events found
             </span>
           </div>
