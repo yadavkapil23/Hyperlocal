@@ -20,6 +20,11 @@ export const eventsApi = {
     return apiClient.post('/api/events', eventData);
   },
 
+  // Delete event
+  deleteEvent: (eventId) => {
+    return apiClient.delete(`/api/events/${eventId}`);
+  },
+
   // RSVP to event
   rsvpEvent: (eventId) => {
     return apiClient.post(`/api/events/${eventId}/rsvp`);
