@@ -125,9 +125,11 @@ export const Map = ({ onEventClick, selectedEvent, filters, radius, setRadius, o
         width: '100%',
         height: '70vh',
         maxWidth: '100%',
-        borderRadius: '8px',
+        borderRadius: '20px',
         overflow: 'hidden',
-        boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05)'
+        boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 4px #3b82f6',
+        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        border: '4px solid #3b82f6'
       }}
     >
       <MapContainer
@@ -156,9 +158,10 @@ export const Map = ({ onEventClick, selectedEvent, filters, radius, setRadius, o
       </MapContainer>
       
       {/* Map controls */}
-      <div className="absolute top-4 left-4 bg-white rounded-lg shadow-lg border border-gray-200 p-4 z-10 min-w-48 max-w-56">
+      <div className="absolute top-4 left-4 bg-gradient-to-br from-yellow-100 to-pink-100 rounded-xl shadow-2xl border-4 border-yellow-300 p-4 z-10 min-w-48 max-w-56">
         <div className="mb-3">
-          <label className="block text-sm font-semibold text-gray-700 mb-2">
+          <label className="block text-sm font-bold text-purple-800 mb-2 flex items-center">
+            <span className="text-lg mr-2">🎯</span>
             Search Radius
           </label>
           <input
@@ -168,31 +171,36 @@ export const Map = ({ onEventClick, selectedEvent, filters, radius, setRadius, o
             step="500"
             value={radius}
             onChange={(e) => setRadius(Number(e.target.value))}
-            className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
+            className="w-full h-3 bg-gradient-to-r from-pink-200 to-purple-200 rounded-lg appearance-none cursor-pointer accent-purple-600"
+            style={{
+              background: 'linear-gradient(to right, #fbb6ce 0%, #c084fc 100%)',
+              borderRadius: '10px'
+            }}
           />
-          <div className="flex justify-between text-xs text-gray-500 mt-1">
+          <div className="flex justify-between text-xs text-purple-600 mt-2 font-bold">
             <span>500m</span>
             <span>10km</span>
           </div>
-          <div className="text-center mt-2">
-            <span className="text-sm font-semibold text-gray-900">
+          <div className="text-center mt-3">
+            <span className="text-lg font-bold text-purple-800 bg-gradient-to-r from-yellow-200 to-pink-200 px-3 py-1 rounded-full">
               {radius}m
             </span>
           </div>
         </div>
         
         {isLoading && (
-          <div className="flex items-center justify-center py-2">
-            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
-            <span className="ml-2 text-sm text-gray-600">
-              Loading events...
+          <div className="flex items-center justify-center py-3 bg-gradient-to-r from-blue-100 to-purple-100 rounded-lg">
+            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-purple-600"></div>
+            <span className="ml-3 text-sm font-bold text-purple-700">
+              🔍 Loading events...
             </span>
           </div>
         )}
         
         {eventsData?.data?.results && (
-          <div className="text-center">
-            <span className="text-sm font-semibold text-green-600">
+          <div className="text-center bg-gradient-to-r from-green-100 to-emerald-100 rounded-lg p-2">
+            <span className="text-sm font-bold text-green-700 flex items-center justify-center">
+              <span className="text-lg mr-2">🎉</span>
               {eventsData.data.results.length} events found
             </span>
           </div>
