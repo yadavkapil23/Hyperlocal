@@ -35,4 +35,13 @@ COPY --from=frontend-builder /app/frontend/dist ./frontend/dist
 
 EXPOSE 5000
 
-CMD ["gunicorn", "app.wsgi:app", "-w", "2", "-k", "gthread", "-b", "0.0.0.0:5000"]
+# Create startup script
+RUN echo '#!/bin/bash\n\
+set -e\n\
+echo "Running database migrations..."\n\
+alembic upgrade head\n\
+echo "Starting application..."\n\
+exec gunicorn app.wsgi:app -w 2 -k gthread -b 0.0.0.0:5000' > /app/start.sh && \
+    chmod +x /app/start.sh
+
+CMD ["/app/start.sh"]
