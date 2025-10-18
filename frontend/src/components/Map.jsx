@@ -159,20 +159,21 @@ export const Map = ({ onEventClick, selectedEvent, filters, radius, setRadius, o
       <div style={{
         position: 'absolute',
         top: '16px',
-        right: '16px',
+        left: '16px',
         background: 'white',
-        padding: '16px',
+        padding: '12px',
         borderRadius: '8px',
         boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
         zIndex: 1000,
-        minWidth: '200px'
+        minWidth: '180px',
+        maxWidth: '220px'
       }}>
-        <div style={{ marginBottom: '16px' }}>
+        <div style={{ marginBottom: '12px' }}>
           <label style={{
             display: 'block',
-            fontSize: '14px',
+            fontSize: '13px',
             fontWeight: '500',
-            marginBottom: '8px',
+            marginBottom: '6px',
             color: '#374151'
           }}>Search Radius</label>
           <input
@@ -195,16 +196,16 @@ export const Map = ({ onEventClick, selectedEvent, filters, radius, setRadius, o
           <div style={{
             display: 'flex',
             justifyContent: 'space-between',
-            fontSize: '12px',
+            fontSize: '11px',
             color: '#6b7280',
-            marginTop: '4px'
+            marginTop: '3px'
           }}>
             <span>500m</span>
             <span>10km</span>
           </div>
-          <div style={{ textAlign: 'center', marginTop: '8px' }}>
+          <div style={{ textAlign: 'center', marginTop: '6px' }}>
             <span style={{
-              fontSize: '14px',
+              fontSize: '13px',
               fontWeight: '500',
               color: '#1f2937'
             }}>{radius}m</span>
@@ -235,7 +236,7 @@ export const Map = ({ onEventClick, selectedEvent, filters, radius, setRadius, o
         {eventsData?.data?.results && (
           <div style={{ textAlign: 'center' }}>
             <span style={{
-              fontSize: '14px',
+              fontSize: '12px',
               fontWeight: '500',
               color: '#059669'
             }}>
