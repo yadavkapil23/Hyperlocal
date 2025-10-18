@@ -75,17 +75,6 @@ const MapEvents = ({ onEventClick, selectedEvent, eventsData }) => {
               click: () => onEventClick(event),
             }}
           >
-            <Popup>
-              <div className="p-2">
-                <h3 className="font-semibold text-sm">{event.title}</h3>
-                <p className="text-xs text-gray-600">{event.category}</p>
-                {event.distance_m && (
-                  <p className="text-xs text-gray-500">
-                    {Math.round(event.distance_m)}m away
-                  </p>
-                )}
-              </div>
-            </Popup>
           </Marker>
           {/* simple visible dot to ensure markers are noticeable */}
           <CircleMarker center={[lat, lng]} radius={6} pathOptions={{ color: '#1e40af', fillColor: '#3b82f6', fillOpacity: 0.8 }} />

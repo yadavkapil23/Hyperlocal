@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { eventsApi } from '../api/events.js';
+import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query';
+import { eventsApi, categoriesApi } from '../api/events.js';
 
 export const CreateEventModal = ({ isOpen, onClose }) => {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
-    category_id: '',
+    category_slug: '',
     starts_at: '',
     ends_at: '',
     latitude: 37.7749, // Default to San Francisco
@@ -17,6 +17,12 @@ export const CreateEventModal = ({ isOpen, onClose }) => {
 
   const queryClient = useQueryClient();
 
+  // Fetch categories for the dropdown
+  const { data: categories } = useQuery({
+    queryKey: ['categories'],
+    queryFn: categoriesApi.getCategories
+  });
+
   const createEventMutation = useMutation({
     mutationFn: eventsApi.createEvent,
     onSuccess: () => {
@@ -25,7 +31,7 @@ export const CreateEventModal = ({ isOpen, onClose }) => {
       setFormData({
         title: '',
         description: '',
-        category_id: '',
+        category_slug: '',
         starts_at: '',
         ends_at: '',
         latitude: 37.7749,
@@ -156,6 +162,39 @@ export const CreateEventModal = ({ isOpen, onClose }) => {
                 resize: 'vertical'
               }}
             />
+          </div>
+
+          <div>
+            <label style={{
+              display: 'block',
+              fontSize: '14px',
+              fontWeight: '500',
+              color: '#374151',
+              marginBottom: '4px'
+            }}>Category *</label>
+            <select
+              name="category_slug"
+              value={formData.category_slug}
+              onChange={handleInputChange}
+              required
+              style={{
+                width: '100%',
+                padding: '8px 12px',
+                border: '1px solid #d1d5db',
+                borderRadius: '4px',
+                fontSize: '14px',
+                color: '#374151',
+                background: 'white',
+                outline: 'none'
+              }}
+            >
+              <option value="">Select a category</option>
+              {categories?.data?.map((category) => (
+                <option key={category.slug} value={category.slug}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
           </div>
 
           <div>
