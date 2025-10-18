@@ -110,6 +110,15 @@ body {
   border: none !important;
 }
 
+/* Ensure map doesn't interfere with modals */
+.leaflet-container {
+  z-index: 1 !important;
+}
+
+.leaflet-control-container {
+  z-index: 2 !important;
+}
+
 .leaflet-popup-content {
   margin: 8px 12px;
   line-height: 1.4;

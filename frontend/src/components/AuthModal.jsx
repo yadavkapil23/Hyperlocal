@@ -25,7 +25,9 @@ export const AuthModal = ({ isOpen, onClose, mode = 'login', variant = 'modal' }
             onClose();
           },
           onError: (err) => {
-            setError(err.response?.data?.detail || 'An error occurred');
+            console.error('Login error:', err);
+            const errorMessage = err.response?.data?.detail || err.message || 'Login failed. Please try again.';
+            setError(errorMessage);
           }
         }
       );
@@ -41,7 +43,9 @@ export const AuthModal = ({ isOpen, onClose, mode = 'login', variant = 'modal' }
             onClose();
           },
           onError: (err) => {
-            setError(err.response?.data?.detail || 'An error occurred');
+            console.error('Register error:', err);
+            const errorMessage = err.response?.data?.detail || err.message || 'Registration failed. Please try again.';
+            setError(errorMessage);
           }
         }
       );
@@ -144,7 +148,7 @@ export const AuthModal = ({ isOpen, onClose, mode = 'login', variant = 'modal' }
   }
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[9999] p-4">
       <div className="bg-white rounded-xl shadow-2xl max-w-md w-full">
         <div className="flex justify-between items-center p-6 border-b border-gray-200">
           <h2 className="text-xl font-bold text-gray-900 m-0">
