@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: hyperlocal-app
+    env: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: hyperlocal-db
+          property: connectionString
+      - key: JWT_SECRET_KEY
+        generateValue: true
+    healthCheckPath: /api/health
+
+databases:
+  - name: hyperlocal-db
+    databaseName: hyperlocal
+    user: hyperlocal
+    plan: free
