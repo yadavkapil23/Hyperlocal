@@ -117,11 +117,11 @@ function AppContent() {
       {/* Main Content */}
       <main className="flex-1" style={{ padding: '16px' }}>
         <div style={{
-          maxWidth: '1200px',
+          maxWidth: '1400px',
           margin: '0 auto',
           display: 'grid',
-          gridTemplateColumns: '2fr 1fr',
-          gap: '16px',
+          gridTemplateColumns: '1fr 1fr',
+          gap: '20px',
           alignItems: 'start'
         }}>
           <div>
@@ -139,9 +139,19 @@ function AppContent() {
                   return;
                 }
                 container.innerHTML = events.map(ev => `
-                  <div style="padding:8px 6px;border-bottom:1px solid #f3f4f6;cursor:pointer;">
-                    <div style="font-size:14px;font-weight:600;color:#111827;">${ev.title}</div>
-                    <div style="font-size:12px;color:#6b7280;">${ev.category}${ev.distance_m ? ` • ${Math.round(ev.distance_m)}m` : ''}</div>
+                  <div style="
+                    padding: 12px 16px;
+                    border-bottom: 1px solid #f3f4f6;
+                    cursor: pointer;
+                    transition: background-color 0.2s;
+                    border-radius: 6px;
+                    margin: 4px 0;
+                  " onmouseover="this.style.backgroundColor='#f8fafc'" onmouseout="this.style.backgroundColor='transparent'">
+                    <div style="font-size: 15px; font-weight: 600; color: #111827; margin-bottom: 4px;">${ev.title}</div>
+                    <div style="font-size: 13px; color: #6b7280; display: flex; align-items: center; gap: 8px;">
+                      <span style="background: #e5e7eb; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 500;">${ev.category}</span>
+                      ${ev.distance_m ? `<span style="color: #9ca3af;">${Math.round(ev.distance_m)}m away</span>` : ''}
+                    </div>
                   </div>
                 `).join('');
                 Array.from(container.children).forEach((child, idx) => {
@@ -152,15 +162,29 @@ function AppContent() {
           </div>
           <div style={{
             background: 'white',
-            borderRadius: '8px',
+            borderRadius: '12px',
             boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
-            maxHeight: '70vh',
-            overflowY: 'auto'
+            maxHeight: '75vh',
+            overflowY: 'auto',
+            minWidth: '350px',
+            border: '1px solid #e5e7eb'
           }}>
-            <div style={{ padding: '12px 16px', borderBottom: '1px solid #e5e7eb' }}>
-              <strong>Events nearby</strong>
+            <div style={{ 
+              padding: '16px 20px', 
+              borderBottom: '1px solid #e5e7eb',
+              background: '#f8fafc',
+              borderRadius: '12px 12px 0 0'
+            }}>
+              <h3 style={{ 
+                margin: 0, 
+                fontSize: '18px', 
+                fontWeight: '600', 
+                color: '#1f2937' 
+              }}>
+                Events nearby
+              </h3>
             </div>
-            <div id="events-list" style={{ padding: '8px 12px' }} />
+            <div id="events-list" style={{ padding: '12px 16px' }} />
             {!isAuthenticated && (
               <div style={{ padding: '12px 16px', borderTop: '1px solid #e5e7eb' }}>
                 <AuthModal isOpen={true} onClose={() => {}} variant="panel" />
