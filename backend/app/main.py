@@ -1,5 +1,5 @@
 import os
-from flask import Flask
+from flask import Flask, send_from_directory, send_file
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 
@@ -38,6 +38,29 @@ def create_app() -> Flask:
     app.register_blueprint(categories_bp, url_prefix="/api")
     app.register_blueprint(auth_bp, url_prefix="/api")
     app.register_blueprint(rsvp_bp, url_prefix="/api")
+
+    # Serve React frontend
+    @app.route('/', defaults={'path': ''})
+    @app.route('/<path:path>')
+    def serve_frontend(path):
+        """Serve React frontend for all non-API routes"""
+        # If it's an API route, let Flask handle it normally
+        if path.startswith('api/'):
+            return None
+        
+        # Build path to frontend dist directory
+        frontend_path = os.path.join(os.path.dirname(__file__), '..', '..', 'frontend', 'dist')
+        
+        # If path is empty or just '/', serve index.html
+        if not path or path == '/':
+            return send_file(os.path.join(frontend_path, 'index.html'))
+        
+        # Try to serve the requested file
+        try:
+            return send_from_directory(frontend_path, path)
+        except:
+            # If file doesn't exist, serve index.html (for client-side routing)
+            return send_file(os.path.join(frontend_path, 'index.html'))
 
     return app
 
