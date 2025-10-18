@@ -45,7 +45,9 @@ def my_rsvps():
     uid = int(get_jwt_identity())
     with next(get_db()) as db:
         rows = db.execute(
-            select(RSVP.event_id, func.count().label("count")).where(RSVP.user_id == uid)
+            select(RSVP.event_id, func.count().label("count"))
+            .where(RSVP.user_id == uid)
+            .group_by(RSVP.event_id)
         ).all()
     return jsonify([{"event_id": eid, "count": int(cnt)} for eid, cnt in rows])
 

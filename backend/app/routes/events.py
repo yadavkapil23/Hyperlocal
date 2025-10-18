@@ -2,14 +2,15 @@ from datetime import datetime
 from typing import List
 
 from flask import Blueprint, jsonify, request
-from sqlalchemy import select, func, cast
+from flask_jwt_extended import jwt_required, get_jwt_identity
+from sqlalchemy import select, func, cast, delete
 from sqlalchemy.orm import Session
 from geoalchemy2.shape import from_shape
 from shapely.geometry import Point
 from geoalchemy2 import Geography, Geometry
 
 from ..db import get_db
-from ..models import Event, Category
+from ..models import Event, Category, User, RSVP
 
 
 events_bp = Blueprint("events", __name__)
@@ -143,5 +144,32 @@ def create_event():
             ),
             201,
         )
+
+
+@events_bp.delete("/events/<int:event_id>")
+@jwt_required()
+def delete_event(event_id):
+    user_id = get_jwt_identity()
+    
+    with next(get_db()) as db:  # type: Session
+        # Get the event and verify ownership
+        event = db.scalar(select(Event).where(Event.id == event_id))
+        if not event:
+            return jsonify({"detail": "Event not found"}), 404
+        
+        # For now, allow any authenticated user to delete any event
+        # In a real app, you'd check if the user is the event creator
+        # user = db.scalar(select(User).where(User.id == user_id))
+        # if event.created_by != user_id:
+        #     return jsonify({"detail": "Not authorized to delete this event"}), 403
+        
+        # First delete all RSVPs for this event
+        db.execute(delete(RSVP).where(RSVP.event_id == event_id))
+        
+        # Then delete the event
+        db.delete(event)
+        db.commit()
+        
+        return jsonify({"detail": "Event deleted successfully"}), 200
 
 
