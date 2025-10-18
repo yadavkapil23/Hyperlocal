@@ -49,7 +49,7 @@ def create_app() -> Flask:
             return None
         
         # Build path to frontend dist directory
-        frontend_path = os.path.join(os.path.dirname(__file__), '..', '..', 'frontend', 'dist')
+        frontend_path = os.path.join('/app', 'frontend', 'dist')
         
         # If path is empty or just '/', serve index.html
         if not path or path == '/':
