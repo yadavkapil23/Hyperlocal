@@ -1,5 +1,4 @@
 Third-Place (Hyperlocal Social Discovery App)
-
 A map-centric web app to discover local, community-driven events and hangouts. This repository provides local development with Docker for a Vite React frontend, an Express backend, and PostgreSQL + PostGIS.
 
 Stack
