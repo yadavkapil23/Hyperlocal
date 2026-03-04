@@ -13,6 +13,7 @@ services:
         generateValue: true
     healthCheckPath: /health
 
+
   - type: web
     name: hyperlocal-frontend
     env: docker
