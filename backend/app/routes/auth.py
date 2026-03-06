@@ -16,7 +16,6 @@ from ..models import User, Profile
 
 auth_bp = Blueprint("auth", __name__)
 
-
 def hash_password(password: str) -> str:
     return hashlib.sha256(password.encode("utf-8")).hexdigest()
 
