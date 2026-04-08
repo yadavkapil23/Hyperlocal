@@ -1,6 +1,7 @@
 # Multi-stage build for single deployment
 FROM node:20-alpine as frontend-builder
 
+
 # Build frontend
 WORKDIR /app/frontend
 COPY frontend/package.json frontend/package-lock.json* ./
